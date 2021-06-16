@@ -1,26 +1,31 @@
 <?php
    
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
    
    
 use Illuminate\Http\Request;
-use App\Http\Controllers\BaseController as BaseController;
+use Illuminate\Support\Arr;
+use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\UserDevice;
 use Validator;
 use App\Http\Resources\UserDevice as UserDeviceResource;
 
 class UserDeviceController extends BaseController
 {
+    const ITEM_PER_PAGE = 15;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user_devices = UserDevice::all();
-    
-        return $this->sendResponse(UserDeviceResource::collection($user_devices), null, 200);
+        $searchParams = $request->all();
+        $userDeviceQuery = UserDevice::query();
+        $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
+        $keyword = Arr::get($searchParams, 'keyword', '');
+
+        return UserDeviceResource::collection($userDeviceQuery->paginate($limit));
     }
     /**
      * Store a newly created resource in storage.
@@ -42,9 +47,9 @@ class UserDeviceController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
    
-        $user_device = UserDevice::create($input);
+        $userDevice = UserDevice::create($input);
    
-        return $this->sendResponse(new UserDeviceResource($user_device));
+        $this->sendResponse(new UserDeviceResource($userDevice));
     } 
    
     /**
@@ -53,15 +58,10 @@ class UserDeviceController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(UserDevice $userDevice)
     {
-        $user_device = UserDevice::find($id);
-  
-        if (is_null($user_device)) {
-            return $this->sendError('Data not found.');
-        }
-   
-        return $this->sendResponse(new UserDeviceResource($user_device));
+
+        return $this->sendResponse(new UserDeviceResource($userDevice));
     }
     
     /**
@@ -84,9 +84,9 @@ class UserDeviceController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-        $user_device->update($input);
+        $userDevice->update($input);
    
-        return $this->sendResponse(new UserDeviceResource($user_device));
+        return $this->sendResponse(new UserDeviceResource($userDevice));
     }
    
     /**
