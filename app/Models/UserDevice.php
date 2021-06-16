@@ -20,6 +20,8 @@ class UserDevice extends Model
         'device_data',
     ];
 
+    protected $with = ['users'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

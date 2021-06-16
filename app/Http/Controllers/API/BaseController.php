@@ -17,14 +17,15 @@ class BaseController extends Controller
     {
     	$response = [
             'success' => true,
-            'data'    => $result,
-            'message' => $message,
         ];
-
-
+        if($result) {
+            $response['data'] = $result;
+        }
+        if($message) {
+            $response['message'] = $message;
+        }
         return response()->json($response, $code);
     }
-
 
     /**
      * return error response.
@@ -37,13 +38,9 @@ class BaseController extends Controller
             'success' => false,
             'message' => $error,
         ];
-
-
         if(!empty($errorMessages)){
             $response['data'] = $errorMessages;
         }
-
-
         return response()->json($response, $code);
     }
 }

@@ -49,9 +49,8 @@ class UserDeviceController extends BaseController
    
         $userDevice = UserDevice::create($input);
    
-        $this->sendResponse(new UserDeviceResource($userDevice));
+        return $this->sendResponse(new UserDeviceResource($userDevice));
     } 
-   
     /**
      * Display the specified resource.
      *
@@ -60,10 +59,8 @@ class UserDeviceController extends BaseController
      */
     public function show(UserDevice $userDevice)
     {
-
         return $this->sendResponse(new UserDeviceResource($userDevice));
     }
-    
     /**
      * Update the specified resource in storage.
      *
@@ -71,7 +68,7 @@ class UserDeviceController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserDevice $user_device)
+    public function update(Request $request, UserDevice $userDevice)
     {
         $input = $request->all();
    
@@ -88,16 +85,19 @@ class UserDeviceController extends BaseController
    
         return $this->sendResponse(new UserDeviceResource($userDevice));
     }
-   
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserDevice $user_device)
+    public function destroy(UserDevice $userDevice)
     {
-        $user_device->delete();
+        try {
+            $userDevice->delete();
+        } catch (\Exception $ex) {
+            return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
+        }
    
         return $this->sendResponse([]);
     }
