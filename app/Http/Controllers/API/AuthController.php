@@ -32,7 +32,7 @@ class AuthController extends BaseController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken(env('APP_TOKEN_KEY'))->accessToken;
-        $success['name'] =  $user->full_name;
+        $success['user'] =  $user;
    
         return $this->sendResponse($success);
     }
@@ -47,12 +47,22 @@ class AuthController extends BaseController
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken(env('APP_TOKEN_KEY'))-> accessToken; 
-            $success['name'] =  $user->full_name;
+            $success['user'] =  $user;
    
             return $this->sendResponse($success);
         } 
         else{ 
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            return $this->sendError('Invalid Email or Password');
         } 
+    }
+
+    public function users(Request $request){
+        $user = Auth::user();
+        if($user){
+            return $this->sendResponse($user);
+        }
+        else {
+            return $this->sendError('Unauthorized.');
+        }
     }
 }

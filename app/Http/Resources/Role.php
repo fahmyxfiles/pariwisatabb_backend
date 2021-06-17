@@ -4,7 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserDevice extends JsonResource
+use App\Http\Resources\Permission as PermissionResource;
+
+class Role extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +18,8 @@ class UserDevice extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => array_intersect_key($this->user->toArray(), array_flip(['full_name', 'email'])),
-            'device_ip' => $this->device_ip,
-            'device_data' => $this->device_data,
+            'name' => $this->name,
+            'permissions' => PermissionResource::collection($this->permissions),
         ];
     }
 }

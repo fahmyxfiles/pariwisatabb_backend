@@ -6,11 +6,14 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\UserDevice;
 use Validator;
-use App\Http\Resources\UserDevice as UserDeviceResource;
+use App\Models\Role;
+use App\Models\Permission;
+use App\Http\Resources\Role as RoleResource;
+use App\Http\Resources\Permission as PermissionResource;
+use DB;
 
-class UserDeviceController extends BaseController
+class RoleController extends BaseController
 {
     const ITEM_PER_PAGE = 15;
     /**
@@ -21,16 +24,10 @@ class UserDeviceController extends BaseController
     public function index(Request $request)
     {
         $searchParams = $request->all();
-        $userDeviceQuery = UserDevice::query();
+        $roleQuery = Role::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
-        $keyword = Arr::get($searchParams, 'keyword', '');
 
-        if (!empty($keyword)) {
-            $userDeviceQuery->where('device_ip', 'LIKE', '%' . $keyword . '%');
-            $userDeviceQuery->orWhere('device_data', 'LIKE', '%' . $keyword . '%');
-        }
-
-        return UserDeviceResource::collection($userDeviceQuery->paginate($limit));
+        return RoleResource::collection($roleQuery->paginate($limit));
     }
     /**
      * Store a newly created resource in storage.
@@ -43,18 +40,18 @@ class UserDeviceController extends BaseController
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'user_id' => 'required|exists:users,id',
-            'device_ip' => 'required',
-            'device_data' => 'required',
+            'name' => 'required|unique:roles,name',
+            'permissions' => 'required',
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+
+        $role = Role::create(['name' => $input['name']]);
+        $role->syncPermissions($input['permissions']);
    
-        $userDevice = UserDevice::create($input);
-   
-        return $this->sendResponse(new UserDeviceResource($userDevice));
+        return $this->sendResponse(new RoleResource($role));
     } 
     /**
      * Display the specified resource.
@@ -62,9 +59,9 @@ class UserDeviceController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(UserDevice $userDevice)
+    public function show(Role $role)
     {
-        return $this->sendResponse(new UserDeviceResource($userDevice));
+        return $this->sendResponse(new RoleResource($role));
     }
     /**
      * Update the specified resource in storage.
@@ -73,22 +70,24 @@ class UserDeviceController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserDevice $userDevice)
+    public function update(Request $request, Role $role)
     {
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'user_id' => 'required|exists:users,id',
-            'device_ip' => 'required',
-            'device_data' => 'required',
+            'name' => 'required',
+            'permissions' => 'required',
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-        $userDevice->update($input);
+        $permissions = $input['permissions'];
+        unset($input['permissions']);
+        $role->update($input);
+        $role->syncPermissions($permissions);
    
-        return $this->sendResponse(new UserDeviceResource($userDevice));
+        return $this->sendResponse(new RoleResource($role));
     }
     /**
      * Remove the specified resource from storage.
@@ -96,14 +95,18 @@ class UserDeviceController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserDevice $userDevice)
+    public function destroy(Role $role)
     {
         try {
-            $userDevice->delete();
+            $role->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }
-   
         return $this->sendResponse([]);
+    }
+
+    public function getAvailablePermissions(Request $request){
+        $permissions = Permission::all();
+        return PermissionResource::collection($permissions);
     }
 }

@@ -9,6 +9,8 @@ class UserDevice extends Model
 {
     use HasFactory;
 
+    protected $guard_name = 'api';
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -20,10 +22,10 @@ class UserDevice extends Model
         'device_data',
     ];
 
-    protected $with = ['users'];
+    protected $with = ['user'];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
