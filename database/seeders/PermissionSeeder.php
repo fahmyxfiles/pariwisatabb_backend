@@ -19,18 +19,11 @@ class PermissionSeeder extends Seeder
         DB::table('permissions')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         $permissions = [
-           'role-list',
-           'role-create',
-           'role-edit',
-           'role-delete',
-           'user_device-list',
-           'user_device-create',
-           'user_device-edit',
-           'user_device-delete'
+           ['manage', 'all'],
         ];
      
         foreach ($permissions as $permission) {
-             Permission::create(['name' => $permission]);
+             Permission::create(['action' => $permission[0], 'subject' => $permission[1]]);
         }
     }
 }
