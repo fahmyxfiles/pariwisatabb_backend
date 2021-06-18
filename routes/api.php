@@ -9,6 +9,8 @@ use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserDeviceController;
 use App\Http\Controllers\API\AuthController;
 
+use App\Http\Controllers\API\RegencyController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,4 +36,7 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('user', UserController::class);
     
     Route::resource('user_device', UserDeviceController::class);
+
+    Route::get('regency/getAvailableProvinces', [RegencyController::class, 'getAvailableProvinces']);
+    Route::resource('regency', RegencyController::class);
 });
