@@ -75,6 +75,7 @@ class AuthController extends BaseController
     public function users(Request $request){
         $user = Auth::user();
         if($user){
+            $user->abilities = $this->getAbilities($user);
             return $this->sendResponse($user);
         }
         else {
