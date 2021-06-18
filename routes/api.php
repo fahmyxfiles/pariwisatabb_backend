@@ -28,6 +28,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group( function () {
     // Get current logged in user
     Route::get('users', [AuthController::class, 'users']);
+    Route::get('getAbilities', [AuthController::class, 'getAbilities']);
 
     // Permissions
     Route::get('role/getAvailablePermissions', [RoleController::class, 'getAvailablePermissions']);

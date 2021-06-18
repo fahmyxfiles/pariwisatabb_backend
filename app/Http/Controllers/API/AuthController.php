@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use Validator;
    
@@ -31,6 +33,7 @@ class AuthController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+        $user->abilities = $this->getAbilities($user);
         $success['token'] =  $user->createToken(env('APP_TOKEN_KEY'))->accessToken;
         $success['user'] =  $user;
    
@@ -46,6 +49,7 @@ class AuthController extends BaseController
     {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
+            $user->abilities = $this->getAbilities($user);
             $success['token'] =  $user->createToken(env('APP_TOKEN_KEY'))-> accessToken; 
             $success['user'] =  $user;
    
@@ -54,6 +58,18 @@ class AuthController extends BaseController
         else{ 
             return $this->sendError('Invalid Email or Password');
         } 
+    }
+
+    private function getAbilities($user){
+        $role_permission = [];
+        foreach($user->roles as $role){
+            $role = Role::findById($role->id);
+            $perms = $role->permissions->toArray();
+            foreach($perms as $perm){
+                $role_permission[] = ['action' => $perm['action'], 'subject' => $perm['subject']];
+            }
+        }
+        return array_merge($role_permission, $user->permissions->toArray());
     }
 
     public function users(Request $request){
