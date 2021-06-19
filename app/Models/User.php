@@ -34,9 +34,6 @@ class User extends Authenticatable
         'password',
     ];
 
-    protected $with = ['roles', 'permissions'];
-    
-
     public function devices()
     {
         return $this->hasMany(UserDevice::class);

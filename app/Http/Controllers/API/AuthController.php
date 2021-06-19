@@ -9,6 +9,8 @@ use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+
+use App\Http\Resources\User as UserResource;
    
 class AuthController extends BaseController
 {
@@ -17,6 +19,7 @@ class AuthController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
+    /*
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -35,10 +38,11 @@ class AuthController extends BaseController
         $user = User::create($input);
         $user->abilities = $this->getAbilities($user);
         $success['token'] =  $user->createToken(env('APP_TOKEN_KEY'))->accessToken;
-        $success['user'] =  $user;
+        $success['user'] =  new UserResource($user);
    
         return $this->sendResponse($success);
     }
+    */
    
     /**
      * Login api
@@ -51,11 +55,11 @@ class AuthController extends BaseController
             $user = Auth::user(); 
             $user->abilities = $this->getAbilities($user);
             $success['token'] =  $user->createToken(env('APP_TOKEN_KEY'))-> accessToken; 
-            $success['user'] =  $user;
+            $success['user'] =  new UserResource($user);
    
             return $this->sendResponse($success);
         } 
-        else{ 
+        else { 
             return $this->sendError('Invalid Email or Password');
         } 
     }
@@ -76,7 +80,7 @@ class AuthController extends BaseController
         $user = Auth::user();
         if($user){
             $user->abilities = $this->getAbilities($user);
-            return $this->sendResponse($user);
+            return $this->sendResponse(new UserResource($user));
         }
         else {
             return $this->sendError('Unauthorized.');
