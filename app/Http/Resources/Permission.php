@@ -18,6 +18,7 @@ class Permission extends JsonResource
             'id' => $this->id,
             'action' => $this->action,
             'subject' => $this->subject,
+            'name' => $this->action . " " . $this->subject,
         ];
     }
 }

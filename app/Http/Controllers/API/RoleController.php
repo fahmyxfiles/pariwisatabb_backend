@@ -27,6 +27,12 @@ class RoleController extends BaseController
         $roleQuery = Role::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
 
+        $keyword = Arr::get($searchParams, 'keyword', '');
+
+        if (!empty($keyword)) {
+            $roleQuery->where('name', 'LIKE', '%' . $keyword . '%');
+        }
+
         return RoleResource::collection($roleQuery->paginate($limit));
     }
     /**
@@ -82,6 +88,11 @@ class RoleController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+
+        if($role->id == 1){
+            return $this->sendError('Update Error.', "Cannot update Administrator role", 403);    
+        }
+
         $permissions = $input['permissions'];
         unset($input['permissions']);
         $role->update($input);
@@ -98,6 +109,9 @@ class RoleController extends BaseController
     public function destroy(Role $role)
     {
         try {
+            if($role->id == 1){
+                return $this->sendError('Delete Error.', "Cannot delete Administrator role", 403);    
+            }
             $role->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
