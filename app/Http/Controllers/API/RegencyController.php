@@ -13,6 +13,7 @@ use App\Models\Province;
 use Validator;
 use App\Http\Resources\Regency as RegencyResource;
 use App\Http\Resources\Province as ProvinceResource;
+use Intervention\Image\Facades\Image;
 
 class RegencyController extends BaseController
 {
@@ -50,16 +51,25 @@ class RegencyController extends BaseController
             'province_id' => 'required|exists:provinces,id',
             'name' => 'required',
             'description' => 'required',
-            'image' => 'required|mimes:png,jpg,jpeg|max:2048',
+            'image' => 'required|base64image|base64mimes:png,jpg,jpeg|base64max:2048',
             'timezone_offset' => 'required|numeric',
         ]);
-   
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $name = time().'_'.$request->file('image')->getClientOriginalName();
-        $filePath = $request->file('image')->storeAs('regency', $name, 'images');
+        $img = Image::make(file_get_contents($input['image']));
+        if($img == null){
+            return $this->sendError('Image Error.', 'Invalid Image uploaded');  
+        }
+        // add callback functionality to retain maximal original image size
+        $img->fit(640, 360, function ($constraint) {
+            $constraint->upsize();
+        });
+        $ext = explode("/", $img->mime())[1];
+       
+        $name = time() . "." . $ext;
+        Storage::disk('images')->put("regency/" . $name, $img->stream('jpg', 80));
         $input['image_filename'] = "images/regency/" . $name;
 
         unset($input['image']);
@@ -93,17 +103,27 @@ class RegencyController extends BaseController
             'province_id' => 'required|exists:provinces,id',
             'name' => 'required',
             'description' => 'required',
-            'image' => 'mimes:png,jpg,jpeg|max:2048',
+            'image' => 'base64image|base64mimes:png,jpg,jpeg|base64max:2048',
             'timezone_offset' => 'required|numeric',
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-        if($request->file('image')){
+        if(!empty($input['image'])){
             Storage::disk('images')->delete('regency/' . basename($regency->image_filename));
-            $name = time().'_'.$request->file('image')->getClientOriginalName();
-            $filePath = $request->file('image')->storeAs('regency', $name, 'images');
+            $img = Image::make(file_get_contents($input['image']));
+            if($img == null){
+                return $this->sendError('Image Error.', 'Invalid Image uploaded');  
+            }
+            // add callback functionality to retain maximal original image size
+            $img->fit(640, 360, function ($constraint) {
+                $constraint->upsize();
+            });
+            $ext = explode("/", $img->mime())[1];
+        
+            $name = time() . "." . $ext;
+            Storage::disk('images')->put("regency/" . $name, $img->stream('jpg', 80));
             $input['image_filename'] = "images/regency/" . $name;
         }
         unset($input['image']);
