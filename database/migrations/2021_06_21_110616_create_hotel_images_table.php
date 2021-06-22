@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegenciesTable extends Migration
+class CreateHotelImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateRegenciesTable extends Migration
      */
     public function up()
     {
-        Schema::create('regencies', function (Blueprint $table) {
+        Schema::create('hotel_images', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('province_id');
+            $table->unsignedBigInteger('hotel_id');
+            $table->unsignedBigInteger('hotel_room_id')->nullable();
             $table->string('name');
-            $table->text('description');
-            $table->string('image_filename')->nullable();
-            $table->bigInteger('timezone_offset');
+            $table->string('image_filename');
+            $table->boolean('is_main');
             $table->timestamps();
 
-            $table->foreign('province_id')->references('id')->on('provinces');
+            $table->foreign('hotel_id')->references('id')->on('hotels');
         });
     }
 
@@ -33,6 +33,6 @@ class CreateRegenciesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('regencies');
+        Schema::dropIfExists('hotel_images');
     }
 }
