@@ -16,7 +16,6 @@ class CreateFacilityCategoriesTable extends Migration
         Schema::create('facility_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('tag');
             $table->timestamps();
         });
     }

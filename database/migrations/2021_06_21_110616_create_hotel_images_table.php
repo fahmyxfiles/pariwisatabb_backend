@@ -19,10 +19,11 @@ class CreateHotelImagesTable extends Migration
             $table->unsignedBigInteger('hotel_room_id')->nullable();
             $table->string('name');
             $table->string('image_filename');
-            $table->boolean('is_main');
+            $table->enum('type', ['main', 'banner', 'common']);
             $table->timestamps();
 
             $table->foreign('hotel_id')->references('id')->on('hotels');
+            $table->foreign('hotel_room_id')->references('id')->on('hotel_rooms');
         });
     }
 

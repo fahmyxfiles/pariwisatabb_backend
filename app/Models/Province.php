@@ -24,4 +24,9 @@ class Province extends Model
      * @var array
      */
     protected $hidden = [ ];
+
+    public function regencies()
+    {
+        return $this->hasMany(Regency::class);
+    }
 }

@@ -18,8 +18,9 @@ class CreateUserDevicesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('device_ip');
             $table->text('device_data');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
