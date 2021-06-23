@@ -10,6 +10,7 @@ use App\Http\Controllers\API\UserDeviceController;
 use App\Http\Controllers\API\AuthController;
 
 use App\Http\Controllers\API\RegencyController;
+use App\Http\Controllers\API\HotelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,6 @@ Route::middleware('auth:api')->group( function () {
 
     Route::get('regency/getAvailableProvinces', [RegencyController::class, 'getAvailableProvinces']);
     Route::resource('regency', RegencyController::class);
+
+    Route::resource('hotel', HotelController::class);
 });
