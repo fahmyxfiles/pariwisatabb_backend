@@ -18,6 +18,9 @@ class CreateHotelRoomsTable extends Migration
             $table->unsignedBigInteger('hotel_id');
             $table->string('name');
             $table->text('description');
+            $table->unsignedBigInteger('num_of_guest');
+            $table->unsignedBigInteger('room_size');
+            $table->enum('bed_size', ['single', 'double', 'queen', 'king', 'twin']);
             $table->timestamps();
 
             $table->foreign('hotel_id')->references('id')->on('hotels');
