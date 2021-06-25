@@ -86,7 +86,7 @@ class HotelController extends BaseController
      */
     public function show(Hotel $hotel)
     {
-        $hotel->load(['rooms', 'facilities']);
+        $hotel->load(['rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
         return $this->sendResponse(new HotelResource($hotel));
     }
     /**

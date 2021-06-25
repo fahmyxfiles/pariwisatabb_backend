@@ -21,7 +21,7 @@ class HotelRoom extends Model
         'description',
     ];
 
-    protected $with = ['images', 'pricings', 'facilities'];
+    protected $with = ['hotel'];
 
     public function hotel()
     {
