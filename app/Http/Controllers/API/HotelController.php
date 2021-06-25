@@ -84,9 +84,10 @@ class HotelController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Regency $regency)
+    public function show(Hotel $hotel)
     {
-        return $this->sendResponse(new RegencyResource($regency));
+        $hotel->load(['rooms', 'facilities']);
+        return $this->sendResponse(new HotelResource($hotel));
     }
     /**
      * Update the specified resource in storage.
@@ -138,19 +139,14 @@ class HotelController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Regency $regency)
+    public function destroy(Hotel $hotel)
     {
         try {
             Storage::disk('images')->delete('regency/' . basename($regency->image_filename));
-            $regency->delete();
+            $hotel->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }
         return $this->sendResponse([]);
-    }
-
-    public function getAvailableProvinces(Request $request){
-        $province = Province::all();
-        return ProvinceResource::collection($province);
     }
 }
