@@ -17,7 +17,7 @@ use Intervention\Image\Facades\Image;
 
 class RegencyController extends BaseController
 {
-    const ITEM_PER_PAGE = 15;
+    const ITEM_PER_PAGE = 6;
     /**
      * Display a listing of the resource.
      *
