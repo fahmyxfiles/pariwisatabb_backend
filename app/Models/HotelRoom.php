@@ -21,6 +21,8 @@ class HotelRoom extends Model
         'description',
     ];
 
+    protected $with = ['images', 'pricings', 'facilities'];
+
     public function hotel()
     {
         return $this->belongsTo(Hotel::class);
@@ -34,5 +36,10 @@ class HotelRoom extends Model
     public function pricings()
     {
         return $this->hasMany(HotelRoomPricing::class);
+    }
+
+    public function facilities()
+    {
+        return $this->belongsToMany(Facility::class, 'hotel_room_has_facilities', 'hotel_room_id', 'facility_id');
     }
 }
