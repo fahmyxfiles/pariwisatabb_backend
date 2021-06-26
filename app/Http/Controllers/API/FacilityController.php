@@ -14,7 +14,7 @@ use Validator;
 use App\Http\Resources\Facility as FacilityResource;
 use App\Http\Resources\FacilityCategory as FacilityCategoryResource;
 
-class HotelController extends BaseController
+class FacilityController extends BaseController
 {
     const ITEM_PER_PAGE = 15;
     /**
