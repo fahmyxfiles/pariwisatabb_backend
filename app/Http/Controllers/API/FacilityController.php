@@ -108,7 +108,7 @@ class FacilityController extends BaseController
         return $this->sendResponse([]);
     }
 
-    public function getAvailableCategories(Request $request, $type){
+    public function getAvailableCategories(Request $request){
         $facilityCategory = FacilityCategory::all();
         return FacilityCategoryResource::collection($facilityCategory);
     }
