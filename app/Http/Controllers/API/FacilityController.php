@@ -108,13 +108,12 @@ class FacilityController extends BaseController
         return $this->sendResponse([]);
     }
 
-    public function getAvailableCategories($type){
-        if (!is_null($type)) {
-            $facilityCategory = FacilityCategory::where('type' , $type)->get();
-        }
-        else {
-            $facilityCategory = FacilityCategory::all();
-        }
+    public function getAvailableCategories(Request $request, $type){
+        $facilityCategory = FacilityCategory::all();
+        return FacilityCategoryResource::collection($facilityCategory);
+    }
+    public function getAvailableCategoriesByType(Request $request, $type){
+        $facilityCategory = FacilityCategory::where('type' , $type)->get();
         return FacilityCategoryResource::collection($facilityCategory);
     }
 }

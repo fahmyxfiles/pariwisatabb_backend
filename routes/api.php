@@ -45,5 +45,6 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('hotel', HotelController::class);
 
     Route::resource('facility', FacilityController::class);
-    Route::get('facility/getAvailableCategories{/type?}', [FacilityController::class, 'getAvailableCategories']);
+    Route::get('facility/getAvailableCategories', [FacilityController::class, 'getAvailableCategories']);
+    Route::get('facility/getAvailableCategoriesByType/{type}', [FacilityController::class, 'getAvailableCategoriesByType']);
 });
