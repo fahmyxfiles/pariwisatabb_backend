@@ -8,14 +8,15 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\Hotel;
+use App\Models\Facility;
+use App\Models\FacilityCategory;
 use Validator;
-use App\Http\Resources\Hotel as HotelResource;
-use Intervention\Image\Facades\Image;
+use App\Http\Resources\Facility as FacilityResource;
+use App\Http\Resources\FacilityCategory as FacilityCategoryResource;
 
 class HotelController extends BaseController
 {
-    const ITEM_PER_PAGE = 6;
+    const ITEM_PER_PAGE = 15;
     /**
      * Display a listing of the resource.
      *
@@ -24,17 +25,15 @@ class HotelController extends BaseController
     public function index(Request $request)
     {
         $searchParams = $request->all();
-        $hotelQuery = Hotel::query();
+        $facilityQuery = Facility::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
 
         if (!empty($keyword)) {
-            $hotelQuery->where('name', 'LIKE', '%' . $keyword . '%');
-            $hotelQuery->orWhere('address', 'LIKE', '%' . $keyword . '%');
-            $hotelQuery->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            $facilityQuery->where('name', 'LIKE', '%' . $keyword . '%');
         }
 
-        return HotelResource::collection($hotelQuery->paginate($limit));
+        return FacilityResource::collection($facilityQuery->paginate($limit));
     }
     /**
      * Store a newly created resource in storage.
@@ -47,20 +46,16 @@ class HotelController extends BaseController
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'regency_id' => 'required|exists:regencies,id',
+            'category_id' => 'required|exists:facility_categories,id',
             'name' => 'required',
-            'address' => 'required',
-            'map_coordinate' => 'required',
-            'map_center' => 'required',
-            'description' => 'required',
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $hotel = Hotel::create($input);
+        $facility = Facility::create($input);
    
-        return $this->sendResponse(new HotelResource($hotel));
+        return $this->sendResponse(new FacilityResource($facility));
     }
     /**
      * Display the specified resource.
@@ -68,10 +63,10 @@ class HotelController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Hotel $hotel)
+    public function show(Facility $facility)
     {
-        $hotel->load(['rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
-        return $this->sendResponse(new HotelResource($hotel));
+        $facility->load('category');
+        return $this->sendResponse(new FacilityResource($facility));
     }
     /**
      * Update the specified resource in storage.
@@ -80,26 +75,22 @@ class HotelController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Hotel $hotel)
+    public function update(Request $request, Facility $facility)
     {
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'regency_id' => 'required|exists:regencies,id',
+            'category_id' => 'required|exists:facility_categories,id',
             'name' => 'required',
-            'address' => 'required',
-            'map_coordinate' => 'required',
-            'map_center' => 'required',
-            'description' => 'required',
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $hotel->update($input);
+        $facility->update($input);
 
-        return $this->sendResponse(new HotelResource($hotel));
+        return $this->sendResponse(new FacilityResource($facility));
     }
     /**
      * Remove the specified resource from storage.
@@ -107,13 +98,23 @@ class HotelController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Hotel $hotel)
+    public function destroy(Facility $facility)
     {
         try {
-            $hotel->delete();
+            $facility->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }
         return $this->sendResponse([]);
+    }
+
+    public function getAvailableCategories($type){
+        if (!is_null($type)) {
+            $facilityCategory = FacilityCategory::where('type' , $type)->get();
+        }
+        else {
+            $facilityCategory = FacilityCategory::all();
+        }
+        return FacilityCategoryResource::collection($facilityCategory);
     }
 }

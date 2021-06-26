@@ -11,6 +11,7 @@ use App\Http\Controllers\API\AuthController;
 
 use App\Http\Controllers\API\RegencyController;
 use App\Http\Controllers\API\HotelController;
+use App\Http\Controllers\API\FacilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +43,7 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('regency', RegencyController::class);
 
     Route::resource('hotel', HotelController::class);
+
+    Route::resource('facility', FacilityController::class);
+    Route::get('facility/getAvailableCategories/{type?}', [FacilityController::class, 'getAvailableCategories']);
 });
