@@ -42,6 +42,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('regency/getAvailableProvinces', [RegencyController::class, 'getAvailableProvinces']);
     Route::resource('regency', RegencyController::class);
 
+    Route::get('hotel/getAvailableRegencies', [HotelController::class, 'getAvailableRegencies']);
     Route::resource('hotel', HotelController::class);
 
     Route::get('facility/getAllFacility', [FacilityController::class, 'getAllFacility']);

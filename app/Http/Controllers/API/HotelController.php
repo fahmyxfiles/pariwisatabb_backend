@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Hotel;
+use App\Models\Regency;
 use Validator;
 use App\Http\Resources\Hotel as HotelResource;
+use App\Http\Resources\Regency as RegencyResource;
 use Intervention\Image\Facades\Image;
 
 class HotelController extends BaseController
@@ -115,5 +117,10 @@ class HotelController extends BaseController
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }
         return $this->sendResponse([]);
+    }
+
+    public function getAvailableRegencies(Request $request){
+        $regencies = Regency::all();
+        return RegencyResource::collection($regencies);
     }
 }

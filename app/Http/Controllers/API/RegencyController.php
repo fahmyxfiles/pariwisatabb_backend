@@ -150,7 +150,7 @@ class RegencyController extends BaseController
     }
 
     public function getAvailableProvinces(Request $request){
-        $province = Province::all();
-        return ProvinceResource::collection($province);
+        $provinces = Province::all();
+        return ProvinceResource::collection($provinces);
     }
 }
