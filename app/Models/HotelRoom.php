@@ -19,6 +19,9 @@ class HotelRoom extends Model
         'hotel_id',
         'name',
         'description',
+        'num_of_guest',
+        'room_size',
+        'bed_size',
     ];
 
     protected $with = ['hotel'];
