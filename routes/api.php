@@ -12,6 +12,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RegencyController;
 use App\Http\Controllers\API\HotelController;
 use App\Http\Controllers\API\HotelRoomController;
+use App\Http\Controllers\API\HotelRoomPricingController;
 use App\Http\Controllers\API\FacilityController;
 
 /*
@@ -48,10 +49,14 @@ Route::middleware('auth:api')->group( function () {
 
     // Hotels and Regencies
     Route::get('hotel/getAvailableRegencies', [HotelController::class, 'getAvailableRegencies']);
+    Route::get('hotel/{$hotel}/syncFacilities', [HotelController::class, 'syncFacilities']);
     Route::resource('hotel', HotelController::class);
 
     // Hotel room
     Route::resource('hotel_room', HotelRoomController::class);
+
+    // Hotel room pricing
+    Route::resource('hotel_room_pricing', HotelRoomPricingController::class);
 
 
     // Facilities

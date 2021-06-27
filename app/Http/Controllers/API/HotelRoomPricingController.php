@@ -8,11 +8,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\HotelRoom;
+use App\Models\HotelRoomPricing;
 use Validator;
-use App\Http\Resources\HotelRoom as HotelRoomResource;
+use App\Http\Resources\HotelRoomPricing as HotelRoomPricingResource;
 
-class HotelRoomController extends BaseController
+class HotelRoomPricingController extends BaseController
 {
     const ITEM_PER_PAGE = 15;
     /**
@@ -23,16 +23,16 @@ class HotelRoomController extends BaseController
     public function index(Request $request)
     {
         $searchParams = $request->all();
-        $hotelRoomQuery = HotelRoom::query();
+        $hotelRoomPricingQuery = HotelRoomPricing::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
 
         if (!empty($keyword)) {
-            $hotelRoomQuery->where('name', 'LIKE', '%' . $keyword . '%');
-            $hotelRoomQuery->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            $hotelRoomPricingQuery->where('name', 'LIKE', '%' . $keyword . '%');
+            $hotelRoomPricingQuery->orWhere('date', 'LIKE', '%' . $keyword . '%');
         }
 
-        return HotelRoomResource::collection($hotelRoomQuery->paginate($limit));
+        return HotelRoomPricingResource::collection($hotelRoomPricingQuery->paginate($limit));
     }
     /**
      * Store a newly created resource in storage.
@@ -45,19 +45,17 @@ class HotelRoomController extends BaseController
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'hotel_id' => 'required|exists:hotels,id',
-            'name' => 'required',
-            'description' => 'required',
-            'num_of_guest' => 'required|numeric|min:1',
-            'room_size' => 'required|numeric|min:1',
-            'bed_size' => 'required',
+            'hotel_room_id' => 'required|exists:hotel_rooms,id',
+            'type' => 'required',
+            'date' => 'date',
+            'price' => 'required|numeric|min:1000',
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $hotelRoom = HotelRoom::create($input);
-        return $this->sendResponse(new HotelRoomResource($hotelRoom));
+        $hotelRoomPricing = HotelRoomPricing::create($input);
+        return $this->sendResponse(new HotelRoomPricingResource($hotelRoomPricing));
     }
     /**
      * Display the specified resource.
@@ -65,9 +63,9 @@ class HotelRoomController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(HotelRoom $hotelRoom)
+    public function show(HotelRoomPricing $hotelRoomPricing)
     {
-        return $this->sendResponse(new HotelRoomResource($hotelRoom));
+        return $this->sendResponse(new HotelRoomPricingResource($hotelRoomPricing));
     }
     /**
      * Update the specified resource in storage.
@@ -76,25 +74,23 @@ class HotelRoomController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, HotelRoom $hotelRoom)
+    public function update(Request $request, HotelRoomPricing $hotelRoomPricing)
     {
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'hotel_id' => 'required|exists:hotels,id',
-            'name' => 'required',
-            'description' => 'required',
-            'num_of_guest' => 'required|numeric|min:1',
-            'room_size' => 'required|numeric|min:1',
-            'bed_size' => 'required',
+            'hotel_room_id' => 'required|exists:hotel_rooms,id',
+            'type' => 'required',
+            'date' => 'date',
+            'price' => 'required|numeric|min:1000',
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $hotelRoom->update($input);
-        return $this->sendResponse(new HotelRoomResource($hotelRoom));
+        $hotelRoomPricing->update($input);
+        return $this->sendResponse(new HotelRoomPricingResource($hotelRoomPricing));
     }
     /**
      * Remove the specified resource from storage.
@@ -102,10 +98,10 @@ class HotelRoomController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HotelRoom $hotelRoom)
+    public function destroy(HotelRoomPricing $hotelRoomPricing)
     {
         try {
-            $hotelRoom->delete();
+            $hotelRoomPricing->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }

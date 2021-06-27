@@ -123,4 +123,14 @@ class HotelController extends BaseController
         $regencies = Regency::all();
         return RegencyResource::collection($regencies);
     }
+
+    public function syncFacilities(Request $request, Hotel $hotel){
+        $input = $request->all();
+        try {
+            $hotel->facilities()->sync($input['facilities']);
+        } catch (\Exception $ex) {
+            return $this->sendError('Sync Error.', $ex->getMessage(), 403);    
+        }
+        return $this->sendResponse([]);
+    }
 }
