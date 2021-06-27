@@ -20,6 +20,8 @@ class Hotel extends Model
         'name',
         'address',
         'postal_code',
+        'map_coordinate',
+        'map_center',
         'description',
     ];
 
