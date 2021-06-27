@@ -59,7 +59,7 @@ class HotelController extends BaseController
         }
 
         $hotel = Hotel::create($input);
-   
+        $hotel->load(['rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
         return $this->sendResponse(new HotelResource($hotel));
     }
     /**
@@ -98,7 +98,7 @@ class HotelController extends BaseController
         }
 
         $hotel->update($input);
-
+        $hotel->load(['rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
         return $this->sendResponse(new HotelResource($hotel));
     }
     /**
