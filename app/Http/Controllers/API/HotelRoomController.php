@@ -49,8 +49,8 @@ class HotelRoomController extends BaseController
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required',
             'description' => 'required',
-            'num_of_guest' => 'required|number',
-            'room_size' => 'required|number',
+            'num_of_guest' => 'required|numeric',
+            'room_size' => 'required|numeric',
             'bed_size' => 'required',
         ]);
         if($validator->fails()){
@@ -85,8 +85,8 @@ class HotelRoomController extends BaseController
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required',
             'description' => 'required',
-            'num_of_guest' => 'required|number',
-            'room_size' => 'required|number',
+            'num_of_guest' => 'required|numeric',
+            'room_size' => 'required|numeric',
             'bed_size' => 'required',
         ]);
    
