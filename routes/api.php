@@ -49,7 +49,7 @@ Route::middleware('auth:api')->group( function () {
 
     // Hotels and Regencies
     Route::get('hotel/getAvailableRegencies', [HotelController::class, 'getAvailableRegencies']);
-    Route::get('hotel/{$hotel}/syncFacilities', [HotelController::class, 'syncFacilities']);
+    Route::post('hotel/{$hotel}/syncFacilities', [HotelController::class, 'syncFacilities']);
     Route::resource('hotel', HotelController::class);
 
     // Hotel room

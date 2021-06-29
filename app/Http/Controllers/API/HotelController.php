@@ -131,6 +131,7 @@ class HotelController extends BaseController
         } catch (\Exception $ex) {
             return $this->sendError('Sync Error.', $ex->getMessage(), 403);    
         }
-        return $this->sendResponse([]);
+        $hotel->load(['rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
+        return $this->sendResponse(new HotelResource($hotel));
     }
 }
