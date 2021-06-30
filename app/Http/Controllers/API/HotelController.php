@@ -126,6 +126,15 @@ class HotelController extends BaseController
 
     public function syncFacilities(Request $request, Hotel $hotel){
         $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'facilities' => 'required|array',
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
         try {
             $hotel->facilities()->sync($input['facilities']);
         } catch (\Exception $ex) {
