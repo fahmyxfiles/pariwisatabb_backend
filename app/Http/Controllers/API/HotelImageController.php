@@ -143,7 +143,6 @@ class HotelImageController extends BaseController
         }
 
         if(!empty($input['file'])){
-            Storage::disk('images')->delete('hotel/' . basename($hotelImage->image_filename));
             $img = Image::make(file_get_contents($input['file']));
             if($img == null){
                 return $this->sendError('Image Error.', 'Invalid Image uploaded');  
@@ -156,7 +155,9 @@ class HotelImageController extends BaseController
                 $constraint->upsize();
             });
             $ext = explode("/", $img->mime())[1];
-        
+
+            Storage::disk('images')->delete('hotel/' . basename($hotelImage->image_filename));
+            
             $name = time() . "." . $ext;
             Storage::disk('images')->put("hotel/" . $name, $img->stream('jpg', 80));
             $input['image_filename'] = "images/hotel/" . $name;
