@@ -47,7 +47,7 @@ class HotelImageController extends BaseController
    
         $validator = Validator::make($input, [
             'hotel_id' => 'required|exists:hotels,id',
-            'hotel_room_id' => 'exists:hotels,id',
+            'hotel_room_id' => 'nullable|exists:hotels,id',
             'name' => 'required',
             'type' => 'required',
             'file' => 'required|image'
@@ -113,7 +113,7 @@ class HotelImageController extends BaseController
    
         $validator = Validator::make($input, [
             'hotel_id' => 'required|exists:hotels,id',
-            'hotel_room_id' => 'exists:hotels,id',
+            'hotel_room_id' => 'nullable|exists:hotels,id',
             'name' => 'required',
             'type' => 'required',
             'file' => 'image'
