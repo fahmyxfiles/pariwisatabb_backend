@@ -111,4 +111,23 @@ class HotelRoomController extends BaseController
         }
         return $this->sendResponse([]);
     }
+
+    public function syncFacilities(Request $request, HotelRoom $hotelRoom){
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'facilities' => 'required|array',
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+        try {
+            $hotelRoom->facilities()->sync($input['facilities']);
+        } catch (\Exception $ex) {
+            return $this->sendError('Sync Error.', $ex->getMessage(), 403);    
+        }
+        return $this->sendResponse(new HotelRoomResource($hotelRoom));
+    }
 }

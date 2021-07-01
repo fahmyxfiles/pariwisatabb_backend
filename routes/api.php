@@ -54,6 +54,7 @@ Route::middleware('auth:api')->group( function () {
 
     // Hotel room
     Route::resource('hotel_room', HotelRoomController::class);
+    Route::post('hotel_room/{hotelRoom}/syncFacilities', [HotelRoomController::class, 'syncFacilities']);
 
     // Hotel room pricing
     Route::resource('hotel_room_pricing', HotelRoomPricingController::class);
