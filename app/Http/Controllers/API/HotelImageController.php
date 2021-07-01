@@ -44,31 +44,35 @@ class HotelImageController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-   
+        
+        $width = 1000;
+        $height = 1000;
+        $imageValidationParams = 'required|base64image|base64mimes:png,jpg,jpeg|base64max:2048';
+        if($input['type'] == 'main'){
+            $width = 1280;
+            $height = 720;
+            $imageValidationParams .= 'base64dimensions:min_width=1280,min_height:720';
+        }
+        if($input['type'] == 'banner'){
+            $width = 1125;
+            $height = 300;
+            $imageValidationParams .= 'base64dimensions:min_width=1280,min_height:720';
+        }
+        if($input['type'] == 'common'){
+            $width = 1000;
+            $height = 750;
+            $imageValidationParams .= 'base64dimensions:min_width=1000,min_height:750';
+        }
+
         $validator = Validator::make($input, [
             'hotel_id' => 'required|exists:hotels,id',
             'hotel_room_id' => 'sometimes|exists:hotels,id',
             'name' => 'required',
             'type' => 'required',
-            'file' => 'required|base64image|base64mimes:png,jpg,jpeg|base64max:2048'
+            'file' => $imageValidationParams
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
-        }
-
-        $width = 1000;
-        $height = 1000;
-        if($input['type'] == 'main'){
-            $width = 1280;
-            $height = 720;
-        }
-        if($input['type'] == 'banner'){
-            $width = 3750;
-            $height = 1000;
-        }
-        if($input['type'] == 'common'){
-            $width = 4000;
-            $height = 3000;
         }
 
         $img = Image::make(file_get_contents($input['file']));
@@ -110,31 +114,35 @@ class HotelImageController extends BaseController
     public function update(Request $request, HotelImage $hotelImage)
     {
         $input = $request->all();
-   
+
+        $width = 1000;
+        $height = 1000;
+        $imageValidationParams = 'image|mimes:png,jpg,jpeg|max:2048';
+        if($input['type'] == 'main'){
+            $width = 1280;
+            $height = 720;
+            $imageValidationParams .= 'dimensions:min_width=1280,min_height:720';
+        }
+        if($input['type'] == 'banner'){
+            $width = 1125;
+            $height = 300;
+            $imageValidationParams .= 'dimensions:min_width=1125,min_height:300';
+        }
+        if($input['type'] == 'common'){
+            $width = 1000;
+            $height = 750;
+            $imageValidationParams .= 'dimensions:min_width=1000,min_height:750';
+        }
+
         $validator = Validator::make($input, [
             'hotel_id' => 'required|exists:hotels,id',
             'hotel_room_id' => 'sometimes|exists:hotels,id',
             'name' => 'required',
             'type' => 'required',
-            'file' => 'image'
+            'file' => $imageValidationParams
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
-        }
-
-        $width = 1000;
-        $height = 1000;
-        if($input['type'] == 'main'){
-            $width = 1280;
-            $height = 720;
-        }
-        if($input['type'] == 'banner'){
-            $width = 3750;
-            $height = 1000;
-        }
-        if($input['type'] == 'common'){
-            $width = 4000;
-            $height = 3000;
         }
 
         if(!empty($input['file'])){
