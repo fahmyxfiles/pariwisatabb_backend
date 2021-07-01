@@ -103,7 +103,7 @@ class HotelImageController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        if(!empty($input['image'])){
+        if(!empty($input['file'])){
             Storage::disk('images')->delete('hotel/' . basename($hotelImage->image_filename));
             $img = Image::make(file_get_contents($input['file']));
             if($img == null){
