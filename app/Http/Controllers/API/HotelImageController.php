@@ -156,7 +156,7 @@ class HotelImageController extends BaseController
         unset($input['file']);
 
         $hotelImage->update($input);
-        return $this->sendResponse(new HotelImageResource($hotelImage));
+        return $this->sendResponse(new HotelImageResource($hotelImage->fresh()));
     }
     /**
      * Remove the specified resource from storage.
