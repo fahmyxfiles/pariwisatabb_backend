@@ -76,7 +76,7 @@ class HotelImageController extends BaseController
         if($img == null){
             return $this->sendError('Image Error.', 'Invalid Image uploaded');  
         }
-        if($img->width() < $width || $img->height() >= $height){
+        if($img->width() < $width || $img->height() < $height){
             return $this->sendError('Invalid size.', 'Minimum allowed image size is ' . $width . 'x' . $height);  
         }
         // add callback functionality to retain maximal original image size
@@ -148,7 +148,7 @@ class HotelImageController extends BaseController
             if($img == null){
                 return $this->sendError('Image Error.', 'Invalid Image uploaded');  
             }
-            if($img->width() < $width || $img->height() >= $height){
+            if($img->width() < $width || $img->height() < $height){
                 return $this->sendError('Invalid size.', 'Minimum allowed image size is ' . $width . 'x' . $height);  
             }
             // add callback functionality to retain maximal original image size
