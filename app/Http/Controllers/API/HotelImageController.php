@@ -44,24 +44,21 @@ class HotelImageController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-        
+
         $width = 1000;
         $height = 1000;
         $imageValidationParams = 'required|base64image|base64mimes:png,jpg,jpeg|base64max:2048';
         if($input['type'] == 'main'){
             $width = 1280;
             $height = 720;
-            $imageValidationParams .= 'base64dimensions:min_width=1280,min_height:720';
         }
         if($input['type'] == 'banner'){
             $width = 1125;
             $height = 300;
-            $imageValidationParams .= 'base64dimensions:min_width=1280,min_height:720';
         }
         if($input['type'] == 'common'){
             $width = 1000;
             $height = 750;
-            $imageValidationParams .= 'base64dimensions:min_width=1000,min_height:750';
         }
 
         $validator = Validator::make($input, [
@@ -78,6 +75,9 @@ class HotelImageController extends BaseController
         $img = Image::make(file_get_contents($input['file']));
         if($img == null){
             return $this->sendError('Image Error.', 'Invalid Image uploaded');  
+        }
+        if($img->width() < $width || $img->height() >= $height){
+            return $this->sendError('Invalid size.', 'Minimum allowed image size is ' . $width . 'x' . $height);  
         }
         // add callback functionality to retain maximal original image size
         $img->fit($width, $height, function ($constraint) {
@@ -121,17 +121,14 @@ class HotelImageController extends BaseController
         if($input['type'] == 'main'){
             $width = 1280;
             $height = 720;
-            $imageValidationParams .= 'dimensions:min_width=1280,min_height:720';
         }
         if($input['type'] == 'banner'){
             $width = 1125;
             $height = 300;
-            $imageValidationParams .= 'dimensions:min_width=1125,min_height:300';
         }
         if($input['type'] == 'common'){
             $width = 1000;
             $height = 750;
-            $imageValidationParams .= 'dimensions:min_width=1000,min_height:750';
         }
 
         $validator = Validator::make($input, [
@@ -150,6 +147,9 @@ class HotelImageController extends BaseController
             $img = Image::make(file_get_contents($input['file']));
             if($img == null){
                 return $this->sendError('Image Error.', 'Invalid Image uploaded');  
+            }
+            if($img->width() < $width || $img->height() >= $height){
+                return $this->sendError('Invalid size.', 'Minimum allowed image size is ' . $width . 'x' . $height);  
             }
             // add callback functionality to retain maximal original image size
             $img->fit($width, $height, function ($constraint) {
