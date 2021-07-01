@@ -47,7 +47,7 @@ class HotelImageController extends BaseController
 
         $width = 1000;
         $height = 1000;
-        $imageValidationParams = 'required|base64image|base64mimes:png,jpg,jpeg|base64max:2048';
+        $imageValidationParams = 'required|image|mimes:png,jpg,jpeg|max:2048';
         if($input['type'] == 'main'){
             $width = 1280;
             $height = 720;
