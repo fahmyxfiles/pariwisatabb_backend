@@ -52,8 +52,6 @@ class HotelController extends BaseController
             'regency_id' => 'required|exists:regencies,id',
             'name' => 'required',
             'address' => 'required',
-            'map_coordinate' => 'required',
-            'map_center' => 'required',
             'description' => 'required',
         ]);
         if($validator->fails()){
@@ -90,8 +88,6 @@ class HotelController extends BaseController
             'regency_id' => 'required|exists:regencies,id',
             'name' => 'required',
             'address' => 'required',
-            'map_coordinate' => 'required',
-            'map_center' => 'required',
             'description' => 'required',
         ]);
    
