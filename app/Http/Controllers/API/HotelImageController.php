@@ -29,7 +29,6 @@ class HotelImageController extends BaseController
 
         if (!empty($keyword)) {
             $hotelImageQuery->where('name', 'LIKE', '%' . $keyword . '%');
-            $hotelImageQuery->orWhere('description', 'LIKE', '%' . $keyword . '%');
         }
 
         return HotelImageResource::collection($hotelImageQuery->paginate($limit));
