@@ -50,7 +50,7 @@ class HotelImageController extends BaseController
             'hotel_room_id' => 'sometimes|exists:hotels,id',
             'name' => 'required',
             'type' => 'required',
-            'file' => 'required|image'
+            'file' => 'required|base64image|base64mimes:png,jpg,jpeg|base64max:2048'
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
@@ -71,7 +71,7 @@ class HotelImageController extends BaseController
             $height = 3000;
         }
 
-        $img = Image::make($input['file']);
+        $img = Image::make(file_get_contents($input['file']));
         if($img == null){
             return $this->sendError('Image Error.', 'Invalid Image uploaded');  
         }
