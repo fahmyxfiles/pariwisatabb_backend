@@ -12,6 +12,8 @@ use App\Models\HotelImage;
 use Validator;
 use App\Http\Resources\HotelImage as HotelImageResource;
 
+use Intervention\Image\Facades\Image;
+
 class HotelImageController extends BaseController
 {
     const ITEM_PER_PAGE = 15;
