@@ -56,12 +56,27 @@ class HotelImageController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
+        $width = 1000;
+        $height = 1000;
+        if($input['type'] == 'main'){
+            $width = 1280;
+            $height = 720;
+        }
+        if($input['type'] == 'banner'){
+            $width = 3750;
+            $height = 1000;
+        }
+        if($input['type'] == 'common'){
+            $width = 4000;
+            $height = 3000;
+        }
+
         $img = Image::make($input['file']);
         if($img == null){
             return $this->sendError('Image Error.', 'Invalid Image uploaded');  
         }
         // add callback functionality to retain maximal original image size
-        $img->fit(1280, 720, function ($constraint) {
+        $img->fit($width, $height, function ($constraint) {
             $constraint->upsize();
         });
         $ext = explode("/", $img->mime())[1];
