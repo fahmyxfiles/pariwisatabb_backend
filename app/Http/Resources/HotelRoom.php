@@ -14,6 +14,6 @@ class HotelRoom extends JsonResource
      */
     public function toArray($request)
     {
-        return array_merge(parent::toArray($request), ['value' => 'Y']);
+        return parent::toArray($request);
     }
 }
