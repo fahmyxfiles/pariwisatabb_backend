@@ -18,8 +18,8 @@ class CreateHotelsTable extends Migration
             $table->unsignedBigInteger('regency_id');
             $table->string('name');
             $table->text('address');
-            $table->text('map_coordinate');
-            $table->text('map_center');
+            $table->text('map_coordinate')->nullable();
+            $table->text('map_center')->nullable();
             $table->string('postal_code');
             $table->text('description');
             $table->timestamps();
