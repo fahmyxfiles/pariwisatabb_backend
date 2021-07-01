@@ -107,6 +107,21 @@ class HotelImageController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
+        $width = 1000;
+        $height = 1000;
+        if($input['type'] == 'main'){
+            $width = 1280;
+            $height = 720;
+        }
+        if($input['type'] == 'banner'){
+            $width = 3750;
+            $height = 1000;
+        }
+        if($input['type'] == 'common'){
+            $width = 4000;
+            $height = 3000;
+        }
+
         if(!empty($input['file'])){
             Storage::disk('images')->delete('hotel/' . basename($hotelImage->image_filename));
             $img = Image::make(file_get_contents($input['file']));
