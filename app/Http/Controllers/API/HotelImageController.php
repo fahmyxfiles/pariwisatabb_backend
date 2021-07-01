@@ -129,7 +129,7 @@ class HotelImageController extends BaseController
                 return $this->sendError('Image Error.', 'Invalid Image uploaded');  
             }
             // add callback functionality to retain maximal original image size
-            $img->fit(1280, 720, function ($constraint) {
+            $img->fit($width, $height, function ($constraint) {
                 $constraint->upsize();
             });
             $ext = explode("/", $img->mime())[1];
