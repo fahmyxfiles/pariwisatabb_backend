@@ -28,7 +28,7 @@ class FacilityController extends BaseController
         $facilityQuery = Facility::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
-        $type = Arr::get($type, 'type', '');
+        $type = Arr::get($searchParams, 'type', '');
 
         if (!empty($keyword)) {
             $facilityQuery->where('name', 'LIKE', '%' . $keyword . '%');
