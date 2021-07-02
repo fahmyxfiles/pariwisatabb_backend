@@ -34,7 +34,7 @@ class FacilityController extends BaseController
             $facilityQuery->where('name', 'LIKE', '%' . $keyword . '%');
         }
         if(!empty($type)){
-            $facilityQuery->whereHas('facility_categories', function (Builder $query) use ($type) {
+            $facilityQuery->whereHas('category', function (Builder $query) use ($type) {
                 $query->where('type', 'LIKE', $type);
             });
         }
