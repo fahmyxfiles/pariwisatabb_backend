@@ -14,6 +14,10 @@ use App\Http\Controllers\API\HotelController;
 use App\Http\Controllers\API\HotelRoomController;
 use App\Http\Controllers\API\HotelRoomPricingController;
 use App\Http\Controllers\API\HotelImageController;
+use App\Http\Controllers\API\GuestHouseController;
+use App\Http\Controllers\API\GuestHouseRoomController;
+use App\Http\Controllers\API\GuestHouseRoomPricingController;
+use App\Http\Controllers\API\GuestHouseImageController;
 use App\Http\Controllers\API\FacilityController;
 
 /*
@@ -62,6 +66,21 @@ Route::middleware('auth:api')->group( function () {
     
     // Hotel images
     Route::resource('hotel_image', HotelImageController::class);
+
+    // GuestHouses and Regencies
+    Route::get('guest_house/getAvailableRegencies', [GuestHouseController::class, 'getAvailableRegencies']);
+    Route::resource('guest_house', GuestHouseController::class);
+    Route::post('guest_house/{guestHouse}/syncFacilities', [GuestHouseController::class, 'syncFacilities']);
+
+    // GuestHouse room
+    Route::resource('guest_house_room', GuestHouseRoomController::class);
+    Route::post('guest_house_room/{guestHouseRoom}/syncFacilities', [GuestHouseRoomController::class, 'syncFacilities']);
+
+    // GuestHouse room pricing
+    Route::resource('guest_house_room_pricing', GuestHouseRoomPricingController::class);
+    
+    // GuestHouse images
+    Route::resource('guest_house_image', GuestHouseImageController::class);
 
     // Facilities
     Route::get('facility/getAllFacility', [FacilityController::class, 'getAllFacility']);
