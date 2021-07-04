@@ -71,7 +71,7 @@ Route::middleware('auth:api')->group( function () {
     // Hotel images
     Route::resource('hotel_image', HotelImageController::class);
 
-    // TouristAttractions and Regencies
+    // GuestHouse and Regencies
     Route::get('guest_house/getAvailableRegencies', [GuestHouseController::class, 'getAvailableRegencies']);
     Route::resource('guest_house', GuestHouseController::class);
     Route::post('guest_house/{guestHouse}/syncFacilities', [GuestHouseController::class, 'syncFacilities']);
@@ -88,6 +88,7 @@ Route::middleware('auth:api')->group( function () {
 
     // TouristAttractions and Regencies
     Route::get('tourist_attraction/getAvailableRegencies', [TouristAttractionController::class, 'getAvailableRegencies']);
+    Route::get('tourist_attraction/getAvailableCategories', [TouristAttractionController::class, 'getAvailableCategories']);
     Route::resource('tourist_attraction', TouristAttractionController::class);
     Route::post('tourist_attraction/{guestHouse}/syncFacilities', [TouristAttractionController::class, 'syncFacilities']);
 

@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\TouristAttraction;
+use App\Models\TouristAttractionCategory;
 use App\Models\Regency;
 use Validator;
 use App\Http\Resources\TouristAttraction as TouristAttractionResource;
+use App\Http\Resources\TouristAttractionCategory as TouristAttractionCategoryResource;
 use App\Http\Resources\Regency as RegencyResource;
 use Intervention\Image\Facades\Image;
 
@@ -120,6 +122,11 @@ class TouristAttractionController extends BaseController
     public function getAvailableRegencies(Request $request){
         $regencies = Regency::all();
         return RegencyResource::collection($regencies);
+    }
+
+    public function getAvailableCategories(Request $request){
+        $touristAttractionCategory = TouristAttractionCategory::all();
+        return TouristAttractionCategoryResource::collection($touristAttractionCategory);
     }
 
     public function syncFacilities(Request $request, TouristAttraction $touristAttraction){
