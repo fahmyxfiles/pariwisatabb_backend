@@ -60,7 +60,7 @@ class TouristAttractionController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-
+        $input['instagram_hashtags'] = implode(",", $input['instagram_hashtags']);
         $touristAttraction = TouristAttraction::create($input);
         $touristAttraction->load(['images', 'pricings', 'facilities']);
         return $this->sendResponse(new TouristAttractionResource($touristAttraction));
@@ -98,6 +98,8 @@ class TouristAttractionController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+
+        $input['instagram_hashtags'] = implode(",", $input['instagram_hashtags']);
 
         $touristAttraction->update($input);
         $touristAttraction->load(['images', 'pricings', 'facilities']);
