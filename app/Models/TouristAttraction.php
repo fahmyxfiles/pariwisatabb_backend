@@ -24,6 +24,7 @@ class TouristAttraction extends Model
         'map_coordinate',
         'map_center',
         'description',
+        'instagram_hashtags',
     ];
 
     protected $with = ['regency', 'images'];
