@@ -18,6 +18,10 @@ use App\Http\Controllers\API\GuestHouseController;
 use App\Http\Controllers\API\GuestHouseRoomController;
 use App\Http\Controllers\API\GuestHouseRoomPricingController;
 use App\Http\Controllers\API\GuestHouseImageController;
+use App\Http\Controllers\API\TouristAttractionController;
+use App\Http\Controllers\API\TouristAttractionCategoryController;
+use App\Http\Controllers\API\TouristAttractionPricingController;
+use App\Http\Controllers\API\TouristAttractionImageController;
 use App\Http\Controllers\API\FacilityController;
 
 /*
@@ -67,7 +71,7 @@ Route::middleware('auth:api')->group( function () {
     // Hotel images
     Route::resource('hotel_image', HotelImageController::class);
 
-    // GuestHouses and Regencies
+    // TouristAttractions and Regencies
     Route::get('guest_house/getAvailableRegencies', [GuestHouseController::class, 'getAvailableRegencies']);
     Route::resource('guest_house', GuestHouseController::class);
     Route::post('guest_house/{guestHouse}/syncFacilities', [GuestHouseController::class, 'syncFacilities']);
@@ -81,6 +85,19 @@ Route::middleware('auth:api')->group( function () {
     
     // GuestHouse images
     Route::resource('guest_house_image', GuestHouseImageController::class);
+
+    // TouristAttractions and Regencies
+    Route::get('tourist_attraction/getAvailableRegencies', [TouristAttractionController::class, 'getAvailableRegencies']);
+    Route::resource('tourist_attraction', TouristAttractionController::class);
+    Route::post('tourist_attraction/{guestHouse}/syncFacilities', [TouristAttractionController::class, 'syncFacilities']);
+
+    Route::resource('tourist_attraction_category', TouristAttractionCategoryController::class);
+
+    // TouristAttractions pricing
+    Route::resource('tourist_attraction_pricing', TouristAttractionPricingController::class);
+    
+    // TouristAttractions images
+    Route::resource('tourist_attraction_image', TouristAttractionImageController::class);
 
     // Facilities
     Route::get('facility/getAllFacility', [FacilityController::class, 'getAllFacility']);

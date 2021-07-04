@@ -141,9 +141,4 @@ class TouristAttractionController extends BaseController
         $touristAttraction->load(['images', 'pricings', 'facilities']);
         return $this->sendResponse(new TouristAttractionResource($touristAttraction));
     }
-
-    public function getInstagramHashtags(Request $request, TouristAttraction $touristAttraction){
-        $hashtagData = $touristAttraction->instagram_hashtags;
-        return $this->sendResponse(explode(" ", $hashtagData));
-    }
 }

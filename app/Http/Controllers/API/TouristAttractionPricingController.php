@@ -17,7 +17,7 @@ use Intervention\Image\Facades\Image;
 
 class TouristAttractionPricingController extends BaseController
 {
-    const ITEM_PER_PAGE = 6;
+    const ITEM_PER_PAGE = 15;
     /**
      * Display a listing of the resource.
      *
