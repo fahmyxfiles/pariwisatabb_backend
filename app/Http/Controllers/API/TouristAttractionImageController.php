@@ -49,16 +49,16 @@ class TouristAttractionImageController extends BaseController
         $height = 1000;
         $imageValidationParams = 'required|image|mimes:png,jpg,jpeg|max:2048';
         if($input['type'] == 'main'){
-            $width = 960;
-            $height = 540;
+            $width = 1280;
+            $height = 720;
         }
         if($input['type'] == 'banner'){
-            $width = 750;
-            $height = 200;
+            $width = 1500;
+            $height = 400;
         }
         if($input['type'] == 'common'){
-            $width = 800;
-            $height = 600;
+            $width = 1000;
+            $height = 750;
         }
 
         $validator = Validator::make($input, [
@@ -118,16 +118,16 @@ class TouristAttractionImageController extends BaseController
         $height = 1000;
         $imageValidationParams = 'image|mimes:png,jpg,jpeg|max:2048';
         if($input['type'] == 'main'){
-            $width = 960;
-            $height = 540;
+            $width = 1280;
+            $height = 720;
         }
         if($input['type'] == 'banner'){
-            $width = 750;
-            $height = 200;
+            $width = 1500;
+            $height = 400;
         }
         if($input['type'] == 'common'){
-            $width = 800;
-            $height = 600;
+            $width = 1000;
+            $height = 750;
         }
 
         $validator = Validator::make($input, [
