@@ -15,7 +15,13 @@ class CreateTouristAttractionImagesTable extends Migration
     {
         Schema::create('tourist_attraction_images', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('tourist_attraction_id');
+            $table->string('name');
+            $table->string('image_filename');
+            $table->enum('type', ['main', 'banner', 'common']);
             $table->timestamps();
+
+            $table->foreign('tourist_attraction_id')->references('id')->on('tourist_attractions');
         });
     }
 

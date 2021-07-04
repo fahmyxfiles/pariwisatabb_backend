@@ -62,8 +62,7 @@ class TouristAttractionImageController extends BaseController
         }
 
         $validator = Validator::make($input, [
-            'guest_house_id' => 'required|exists:guest_houses,id',
-            'guest_house_room_id' => 'nullable|exists:guest_house_rooms,id',
+            'tourist_attraction_id' => 'required|exists:tourist_attractions,id',
             'name' => 'required',
             'type' => 'required',
             'file' => $imageValidationParams
@@ -86,8 +85,8 @@ class TouristAttractionImageController extends BaseController
         $ext = explode("/", $img->mime())[1];
        
         $name = time() . "." . $ext;
-        Storage::disk('images')->put("guest_house/" . $name, $img->stream('jpg', 80));
-        $input['image_filename'] = "images/guest_house/" . $name;
+        Storage::disk('images')->put("tourist_attraction/" . $name, $img->stream('jpg', 80));
+        $input['image_filename'] = "images/tourist_attraction/" . $name;
 
         unset($input['file']);
 
@@ -132,8 +131,8 @@ class TouristAttractionImageController extends BaseController
         }
 
         $validator = Validator::make($input, [
-            'guest_house_id' => 'required|exists:guest_houses,id',
-            'guest_house_room_id' => 'nullable|exists:guest_house_rooms,id',
+            'tourist_attraction_id' => 'required|exists:tourist_attractions,id',
+            'tourist_attraction_room_id' => 'nullable|exists:tourist_attraction_rooms,id',
             'name' => 'required',
             'type' => 'required',
             'file' => $imageValidationParams
@@ -156,11 +155,11 @@ class TouristAttractionImageController extends BaseController
             });
             $ext = explode("/", $img->mime())[1];
 
-            Storage::disk('images')->delete('guest_house/' . basename($touristAttractionImage->image_filename));
+            Storage::disk('images')->delete('tourist_attraction/' . basename($touristAttractionImage->image_filename));
             
             $name = time() . "." . $ext;
-            Storage::disk('images')->put("guest_house/" . $name, $img->stream('jpg', 80));
-            $input['image_filename'] = "images/guest_house/" . $name;
+            Storage::disk('images')->put("tourist_attraction/" . $name, $img->stream('jpg', 80));
+            $input['image_filename'] = "images/tourist_attraction/" . $name;
             unset($input['file']);
         }
 
@@ -176,7 +175,7 @@ class TouristAttractionImageController extends BaseController
     public function destroy(TouristAttractionImage $touristAttractionImage)
     {
         try {
-            Storage::disk('images')->delete('guest_house/' . basename($touristAttractionImage->image_filename));
+            Storage::disk('images')->delete('tourist_attraction/' . basename($touristAttractionImage->image_filename));
             $touristAttractionImage->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
