@@ -19,7 +19,7 @@ class CreateTouristAttractionHasFacilitiesTable extends Migration
 
             $table->foreign('tourist_attraction_id')->references('id')->on('tourist_attractions');
             $table->foreign('facility_id')->references('id')->on('facilities');
-            $table->primary(['tourist_attraction_id', 'facility_id'], 'tourist_attraction_has_facilities_tourist_attraction_id_facility_id_primary');
+            $table->primary(['tourist_attraction_id', 'facility_id'], 'ta_has_facilities_ta_id_f_id_primary');
         });
     }
 
