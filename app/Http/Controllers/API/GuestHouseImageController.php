@@ -83,10 +83,10 @@ class GuestHouseImageController extends BaseController
         $img->fit($width, $height, function ($constraint) {
             $constraint->upsize();
         });
-        $ext = explode("/", $img->mime())[1];
+        $format = "jpg";
        
-        $name = time() . "." . $ext;
-        Storage::disk('images')->put("guest_house/" . $name, $img->stream('jpg', 80));
+        $name = time() . "." . $format;
+        Storage::disk('images')->put("guest_house/" . $name, $img->stream($format, 100));
         $input['image_filename'] = "images/guest_house/" . $name;
 
         unset($input['file']);
@@ -154,12 +154,12 @@ class GuestHouseImageController extends BaseController
             $img->fit($width, $height, function ($constraint) {
                 $constraint->upsize();
             });
-            $ext = explode("/", $img->mime())[1];
+            $format = "jpg";
 
             Storage::disk('images')->delete('guest_house/' . basename($guestHouseImage->image_filename));
             
-            $name = time() . "." . $ext;
-            Storage::disk('images')->put("guest_house/" . $name, $img->stream('jpg', 80));
+            $name = time() . "." . $format;
+            Storage::disk('images')->put("guest_house/" . $name, $img->stream($format, 100));
             $input['image_filename'] = "images/guest_house/" . $name;
             unset($input['file']);
         }

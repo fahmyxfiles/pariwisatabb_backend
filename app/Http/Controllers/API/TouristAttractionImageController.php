@@ -82,10 +82,10 @@ class TouristAttractionImageController extends BaseController
         $img->fit($width, $height, function ($constraint) {
             $constraint->upsize();
         });
-        $ext = explode("/", $img->mime())[1];
+        $format = "jpg";
        
-        $name = time() . "." . $ext;
-        Storage::disk('images')->put("tourist_attraction/" . $name, $img->stream('jpg', 80));
+        $name = time() . "." . $format;
+        Storage::disk('images')->put("tourist_attraction/" . $name, $img->stream($format, 100));
         $input['image_filename'] = "images/tourist_attraction/" . $name;
 
         unset($input['file']);
@@ -153,12 +153,12 @@ class TouristAttractionImageController extends BaseController
             $img->fit($width, $height, function ($constraint) {
                 $constraint->upsize();
             });
-            $ext = explode("/", $img->mime())[1];
+            $format = "jpg";
 
             Storage::disk('images')->delete('tourist_attraction/' . basename($touristAttractionImage->image_filename));
             
-            $name = time() . "." . $ext;
-            Storage::disk('images')->put("tourist_attraction/" . $name, $img->stream('jpg', 80));
+            $name = time() . "." . $format;
+            Storage::disk('images')->put("tourist_attraction/" . $name, $img->stream($format, 100));
             $input['image_filename'] = "images/tourist_attraction/" . $name;
             unset($input['file']);
         }

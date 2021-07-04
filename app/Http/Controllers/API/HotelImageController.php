@@ -83,10 +83,10 @@ class HotelImageController extends BaseController
         $img->fit($width, $height, function ($constraint) {
             $constraint->upsize();
         });
-        $ext = explode("/", $img->mime())[1];
+        $format = "jpg";
        
-        $name = time() . "." . $ext;
-        Storage::disk('images')->put("hotel/" . $name, $img->stream('jpg', 80));
+        $name = time() . "." . $format;
+        Storage::disk('images')->put("hotel/" . $name, $img->stream($format, 100));
         $input['image_filename'] = "images/hotel/" . $name;
 
         unset($input['file']);
@@ -154,12 +154,12 @@ class HotelImageController extends BaseController
             $img->fit($width, $height, function ($constraint) {
                 $constraint->upsize();
             });
-            $ext = explode("/", $img->mime())[1];
+            $format = "jpg";
 
             Storage::disk('images')->delete('hotel/' . basename($hotelImage->image_filename));
             
-            $name = time() . "." . $ext;
-            Storage::disk('images')->put("hotel/" . $name, $img->stream('jpg', 80));
+            $name = time() . "." . $format;
+            Storage::disk('images')->put("hotel/" . $name, $img->stream($format, 100));
             $input['image_filename'] = "images/hotel/" . $name;
             unset($input['file']);
         }
