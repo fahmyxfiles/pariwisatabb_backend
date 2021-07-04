@@ -19,7 +19,7 @@ class CreateGuestHouseRoomHasFacilitiesTable extends Migration
 
             $table->foreign('guest_house_room_id')->references('id')->on('guest_house_rooms');
             $table->foreign('facility_id')->references('id')->on('facilities');
-            $table->primary(['guest_house_room_id', 'facility_id'], 'guest_house_room_has_facilities_guest_house_room_id_facility_id_primary');
+            $table->primary(['guest_house_room_id', 'facility_id'], 'guest_house_room_has_facilities_gh_id_f_id_primary');
         });
     }
 
