@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Province extends Model
+class TouristAttractionImage extends Model
 {
     use HasFactory;
+
     protected $guard_name = 'api';
     /**
      * The attributes that are mass assignable.
@@ -15,11 +16,14 @@ class Province extends Model
      * @var array
      */
     protected $fillable = [
+        'tourist_attraction_id',
         'name',
+        'image_filename',
+        'type',
     ];
 
-    public function regencies()
+    public function tourist_attraction()
     {
-        return $this->hasMany(Regency::class);
+        return $this->belongsTo(TouristAttraction::class);
     }
 }

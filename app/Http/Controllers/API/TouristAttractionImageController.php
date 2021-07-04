@@ -8,13 +8,13 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\HotelImage;
+use App\Models\TouristAttractionImage;
 use Validator;
-use App\Http\Resources\HotelImage as HotelImageResource;
+use App\Http\Resources\TouristAttractionImage as TouristAttractionImageResource;
 
 use Intervention\Image\Facades\Image;
 
-class HotelImageController extends BaseController
+class TouristAttractionImageController extends BaseController
 {
     const ITEM_PER_PAGE = 15;
     /**
@@ -25,15 +25,15 @@ class HotelImageController extends BaseController
     public function index(Request $request)
     {
         $searchParams = $request->all();
-        $hotelImageQuery = HotelImage::query();
+        $touristAttractionImageQuery = TouristAttractionImage::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
 
         if (!empty($keyword)) {
-            $hotelImageQuery->where('name', 'LIKE', '%' . $keyword . '%');
+            $touristAttractionImageQuery->where('name', 'LIKE', '%' . $keyword . '%');
         }
 
-        return HotelImageResource::collection($hotelImageQuery->paginate($limit));
+        return TouristAttractionImageResource::collection($touristAttractionImageQuery->paginate($limit));
     }
     /**
      * Store a newly created resource in storage.
@@ -62,8 +62,8 @@ class HotelImageController extends BaseController
         }
 
         $validator = Validator::make($input, [
-            'hotel_id' => 'required|exists:hotels,id',
-            'hotel_room_id' => 'nullable|exists:hotel_rooms,id',
+            'guest_house_id' => 'required|exists:guest_houses,id',
+            'guest_house_room_id' => 'nullable|exists:guest_house_rooms,id',
             'name' => 'required',
             'type' => 'required',
             'file' => $imageValidationParams
@@ -86,13 +86,13 @@ class HotelImageController extends BaseController
         $ext = explode("/", $img->mime())[1];
        
         $name = time() . "." . $ext;
-        Storage::disk('images')->put("hotel/" . $name, $img->stream('jpg', 80));
-        $input['image_filename'] = "images/hotel/" . $name;
+        Storage::disk('images')->put("guest_house/" . $name, $img->stream('jpg', 80));
+        $input['image_filename'] = "images/guest_house/" . $name;
 
         unset($input['file']);
 
-        $hotelImage = HotelImage::create($input);
-        return $this->sendResponse(new HotelImageResource($hotelImage));
+        $touristAttractionImage = TouristAttractionImage::create($input);
+        return $this->sendResponse(new TouristAttractionImageResource($touristAttractionImage));
     }
     /**
      * Display the specified resource.
@@ -100,9 +100,9 @@ class HotelImageController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(HotelImage $hotelImage)
+    public function show(TouristAttractionImage $touristAttractionImage)
     {
-        return $this->sendResponse(new HotelImageResource($hotelImage));
+        return $this->sendResponse(new TouristAttractionImageResource($touristAttractionImage));
     }
     /**
      * Update the specified resource in storage.
@@ -111,7 +111,7 @@ class HotelImageController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, HotelImage $hotelImage)
+    public function update(Request $request, TouristAttractionImage $touristAttractionImage)
     {
         $input = $request->all();
 
@@ -132,8 +132,8 @@ class HotelImageController extends BaseController
         }
 
         $validator = Validator::make($input, [
-            'hotel_id' => 'required|exists:hotels,id',
-            'hotel_room_id' => 'nullable|exists:hotel_rooms,id',
+            'guest_house_id' => 'required|exists:guest_houses,id',
+            'guest_house_room_id' => 'nullable|exists:guest_house_rooms,id',
             'name' => 'required',
             'type' => 'required',
             'file' => $imageValidationParams
@@ -156,16 +156,16 @@ class HotelImageController extends BaseController
             });
             $ext = explode("/", $img->mime())[1];
 
-            Storage::disk('images')->delete('hotel/' . basename($hotelImage->image_filename));
+            Storage::disk('images')->delete('guest_house/' . basename($touristAttractionImage->image_filename));
             
             $name = time() . "." . $ext;
-            Storage::disk('images')->put("hotel/" . $name, $img->stream('jpg', 80));
-            $input['image_filename'] = "images/hotel/" . $name;
+            Storage::disk('images')->put("guest_house/" . $name, $img->stream('jpg', 80));
+            $input['image_filename'] = "images/guest_house/" . $name;
             unset($input['file']);
         }
 
-        $hotelImage->update($input);
-        return $this->sendResponse(new HotelImageResource($hotelImage->fresh()));
+        $touristAttractionImage->update($input);
+        return $this->sendResponse(new TouristAttractionImageResource($touristAttractionImage->fresh()));
     }
     /**
      * Remove the specified resource from storage.
@@ -173,11 +173,11 @@ class HotelImageController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HotelImage $hotelImage)
+    public function destroy(TouristAttractionImage $touristAttractionImage)
     {
         try {
-            Storage::disk('images')->delete('hotel/' . basename($hotelImage->image_filename));
-            $hotelImage->delete();
+            Storage::disk('images')->delete('guest_house/' . basename($touristAttractionImage->image_filename));
+            $touristAttractionImage->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }

@@ -22,15 +22,23 @@ class Regency extends Model
         'timezone_offset',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [ ];
-
     public function province()
     {
         return $this->belongsTo(Province::class, 'province_id');
+    }
+
+    public function hotels()
+    {
+        return $this->hasMany(Hotel::class);
+    }
+
+    public function guest_houses()
+    {
+        return $this->hasMany(GuestHouse::class);
+    }
+
+    public function tourist_attractions()
+    {
+        return $this->hasMany(TouristAttraction::class);
     }
 }

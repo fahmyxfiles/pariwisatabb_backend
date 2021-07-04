@@ -52,6 +52,7 @@ class GuestHouseController extends BaseController
             'regency_id' => 'required|exists:regencies,id',
             'name' => 'required',
             'address' => 'required',
+            'postal_code' => 'required',
             'description' => 'required',
         ]);
         if($validator->fails()){
@@ -88,6 +89,7 @@ class GuestHouseController extends BaseController
             'regency_id' => 'required|exists:regencies,id',
             'name' => 'required',
             'address' => 'required',
+            'postal_code' => 'required',
             'description' => 'required',
         ]);
    

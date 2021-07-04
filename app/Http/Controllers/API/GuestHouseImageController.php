@@ -161,8 +161,8 @@ class GuestHouseImageController extends BaseController
             $name = time() . "." . $ext;
             Storage::disk('images')->put("guest_house/" . $name, $img->stream('jpg', 80));
             $input['image_filename'] = "images/guest_house/" . $name;
+            unset($input['file']);
         }
-        unset($input['file']);
 
         $guestHouseImage->update($input);
         return $this->sendResponse(new GuestHouseImageResource($guestHouseImage->fresh()));

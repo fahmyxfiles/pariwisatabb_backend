@@ -8,14 +8,14 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\Hotel;
+use App\Models\TouristAttraction;
 use App\Models\Regency;
 use Validator;
-use App\Http\Resources\Hotel as HotelResource;
+use App\Http\Resources\TouristAttraction as TouristAttractionResource;
 use App\Http\Resources\Regency as RegencyResource;
 use Intervention\Image\Facades\Image;
 
-class HotelController extends BaseController
+class TouristAttractionController extends BaseController
 {
     const ITEM_PER_PAGE = 6;
     /**
@@ -26,17 +26,17 @@ class HotelController extends BaseController
     public function index(Request $request)
     {
         $searchParams = $request->all();
-        $hotelQuery = Hotel::query();
+        $touristAttractionQuery = TouristAttraction::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
 
         if (!empty($keyword)) {
-            $hotelQuery->where('name', 'LIKE', '%' . $keyword . '%');
-            $hotelQuery->orWhere('address', 'LIKE', '%' . $keyword . '%');
-            $hotelQuery->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            $touristAttractionQuery->where('name', 'LIKE', '%' . $keyword . '%');
+            $touristAttractionQuery->orWhere('address', 'LIKE', '%' . $keyword . '%');
+            $touristAttractionQuery->orWhere('description', 'LIKE', '%' . $keyword . '%');
         }
 
-        return HotelResource::collection($hotelQuery->paginate($limit));
+        return TouristAttractionResource::collection($touristAttractionQuery->paginate($limit));
     }
     /**
      * Store a newly created resource in storage.
@@ -59,9 +59,9 @@ class HotelController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $hotel = Hotel::create($input);
-        $hotel->load(['images', 'rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
-        return $this->sendResponse(new HotelResource($hotel));
+        $touristAttraction = TouristAttraction::create($input);
+        $touristAttraction->load(['images', 'pricings', 'facilities']);
+        return $this->sendResponse(new TouristAttractionResource($touristAttraction));
     }
     /**
      * Display the specified resource.
@@ -69,10 +69,10 @@ class HotelController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Hotel $hotel)
+    public function show(TouristAttraction $touristAttraction)
     {
-        $hotel->load(['images', 'rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
-        return $this->sendResponse(new HotelResource($hotel));
+        $touristAttraction->load(['images', 'pricings', 'facilities']);
+        return $this->sendResponse(new TouristAttractionResource($touristAttraction));
     }
     /**
      * Update the specified resource in storage.
@@ -81,7 +81,7 @@ class HotelController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Hotel $hotel)
+    public function update(Request $request, TouristAttraction $touristAttraction)
     {
         $input = $request->all();
    
@@ -97,9 +97,9 @@ class HotelController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $hotel->update($input);
-        $hotel->load(['images', 'rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
-        return $this->sendResponse(new HotelResource($hotel));
+        $touristAttraction->update($input);
+        $touristAttraction->load(['images', 'pricings', 'facilities']);
+        return $this->sendResponse(new TouristAttractionResource($touristAttraction));
     }
     /**
      * Remove the specified resource from storage.
@@ -107,10 +107,10 @@ class HotelController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Hotel $hotel)
+    public function destroy(TouristAttraction $touristAttraction)
     {
         try {
-            $hotel->delete();
+            $touristAttraction->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }
@@ -122,7 +122,7 @@ class HotelController extends BaseController
         return RegencyResource::collection($regencies);
     }
 
-    public function syncFacilities(Request $request, Hotel $hotel){
+    public function syncFacilities(Request $request, TouristAttraction $touristAttraction){
         $input = $request->all();
 
         $validator = Validator::make($input, [
@@ -134,11 +134,16 @@ class HotelController extends BaseController
         }
 
         try {
-            $hotel->facilities()->sync($input['facilities']);
+            $touristAttraction->facilities()->sync($input['facilities']);
         } catch (\Exception $ex) {
             return $this->sendError('Sync Error.', $ex->getMessage(), 403);    
         }
-        $hotel->load(['images', 'rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
-        return $this->sendResponse(new HotelResource($hotel));
+        $touristAttraction->load(['images', 'pricings', 'facilities']);
+        return $this->sendResponse(new TouristAttractionResource($touristAttraction));
+    }
+
+    public function getInstagramHashtags(Request $request, TouristAttraction $touristAttraction){
+        $hashtagData = $touristAttraction->instagram_hashtags;
+        return $this->sendResponse(explode(" ", $hashtagData));
     }
 }
