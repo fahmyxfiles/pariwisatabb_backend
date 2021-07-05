@@ -19,7 +19,7 @@ class CreateTouristAttractionPricingsTable extends Migration
             $table->enum('type', ['Weekday', 'Weekend', 'Date']);
             $table->date('date')->nullable();
             $table->enum('category', ['person', 'vehicle']);
-            $table->enum('category_type', ['all', 'adult', 'child', 'car', 'motorbike']);
+            $table->enum('category_type', ['all', 'adult', 'child', 'car', 'bus', 'motorbike']);
             $table->unsignedInteger('age_min')->nullable();
             $table->unsignedInteger('age_max')->nullable();
             $table->unsignedBigInteger('price');
