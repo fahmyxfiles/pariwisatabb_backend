@@ -90,7 +90,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('tourist_attraction/getAvailableRegencies', [TouristAttractionController::class, 'getAvailableRegencies']);
     Route::get('tourist_attraction/getAvailableCategories', [TouristAttractionController::class, 'getAvailableCategories']);
     Route::resource('tourist_attraction', TouristAttractionController::class);
-    Route::post('tourist_attraction/{guestHouse}/syncFacilities', [TouristAttractionController::class, 'syncFacilities']);
+    Route::post('tourist_attraction/{touristAttraction}/syncFacilities', [TouristAttractionController::class, 'syncFacilities']);
 
     Route::resource('tourist_attraction_category', TouristAttractionCategoryController::class);
 
