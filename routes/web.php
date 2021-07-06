@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\HotelController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::prefix('json')->group(function () {
+    Route::get('/hotels', [HotelController::class, 'index']);
 });

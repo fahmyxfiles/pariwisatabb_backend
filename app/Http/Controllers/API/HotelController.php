@@ -29,14 +29,26 @@ class HotelController extends BaseController
         $hotelQuery = Hotel::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
+        $regency_id = Arr::get($searchParams, 'regency_id', '');
+        $paginate = Arr::get($searchParams, 'paginate', true);
 
         if (!empty($keyword)) {
-            $hotelQuery->where('name', 'LIKE', '%' . $keyword . '%');
-            $hotelQuery->orWhere('address', 'LIKE', '%' . $keyword . '%');
-            $hotelQuery->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            $hotelQuery->where(function ($query) use ($keyword){
+                $query->where('name', 'LIKE', '%' . $keyword . '%');
+                $query->orWhere('address', 'LIKE', '%' . $keyword . '%');
+                $query->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            });
         }
 
-        return HotelResource::collection($hotelQuery->paginate($limit));
+        if(!empty($regency_id)){
+            $hotelQuery->where('regency_id', '=', $regency_id);
+        }
+        if($paginate == true){
+            return HotelResource::collection($hotelQuery->paginate($limit));
+        }
+        else {
+            return HotelResource::collection($hotelQuery->get());
+        }
     }
     /**
      * Store a newly created resource in storage.
