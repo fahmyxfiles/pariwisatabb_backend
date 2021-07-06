@@ -44,6 +44,7 @@ class HotelController extends BaseController
         if(!empty($regency_id)){
             $hotelQuery->where('regency_id', '=', $regency_id);
         }
+        
         if (!empty($paginate)) {
             return HotelResource::collection($hotelQuery->with(explode(",", $scope))->paginate($limit));
         }

@@ -29,14 +29,30 @@ class GuestHouseController extends BaseController
         $guestHouseQuery = GuestHouse::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
+        $regency_id = Arr::get($searchParams, 'regency_id', '');
+        $paginate = Arr::get($searchParams, 'paginate', '1');
+        $scope = Arr::get($searchParams, 'scope', 'regency,images');
 
         if (!empty($keyword)) {
-            $guestHouseQuery->where('name', 'LIKE', '%' . $keyword . '%');
-            $guestHouseQuery->orWhere('address', 'LIKE', '%' . $keyword . '%');
-            $guestHouseQuery->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            if (!empty($keyword)) {
+                $guestHouseQuery->where(function ($query) use ($keyword){
+                    $query->where('name', 'LIKE', '%' . $keyword . '%');
+                    $query->orWhere('address', 'LIKE', '%' . $keyword . '%');
+                    $query->orWhere('description', 'LIKE', '%' . $keyword . '%');
+                });
+            }
         }
 
-        return GuestHouseResource::collection($guestHouseQuery->paginate($limit));
+        if(!empty($regency_id)){
+            $guestHouseQuery->where('regency_id', '=', $regency_id);
+        }
+
+        if (!empty($paginate)) {
+            return HotelResource::collection($guestHouseQuery->with(explode(",", $scope))->paginate($limit));
+        }
+        else {
+            return HotelResource::collection($guestHouseQuery->with(explode(",", $scope))->get());
+        }
     }
     /**
      * Store a newly created resource in storage.

@@ -31,14 +31,28 @@ class TouristAttractionController extends BaseController
         $touristAttractionQuery = TouristAttraction::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
+        $regency_id = Arr::get($searchParams, 'regency_id', '');
+        $paginate = Arr::get($searchParams, 'paginate', '1');
+        $scope = Arr::get($searchParams, 'scope', 'regency,images');
 
         if (!empty($keyword)) {
-            $touristAttractionQuery->where('name', 'LIKE', '%' . $keyword . '%');
-            $touristAttractionQuery->orWhere('address', 'LIKE', '%' . $keyword . '%');
-            $touristAttractionQuery->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            $touristAttractionQuery->where(function ($query) use ($keyword){
+                $query->where('name', 'LIKE', '%' . $keyword . '%');
+                $query->orWhere('address', 'LIKE', '%' . $keyword . '%');
+                $query->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            });
         }
 
-        return TouristAttractionResource::collection($touristAttractionQuery->paginate($limit));
+        if(!empty($regency_id)){
+            $touristAttractionQuery->where('regency_id', '=', $regency_id);
+        }
+        
+        if (!empty($paginate)) {
+            return HotelResource::collection($touristAttractionQuery->with(explode(",", $scope))->paginate($limit));
+        }
+        else {
+            return HotelResource::collection($touristAttractionQuery->with(explode(",", $scope))->get());
+        }
     }
     /**
      * Store a newly created resource in storage.

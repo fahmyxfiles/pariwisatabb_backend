@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\HotelController;
+use App\Http\Controllers\API\GuestHouseController;
+use App\Http\Controllers\API\TouristAttractionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,5 +23,7 @@ Route::get('/', function () {
 
 
 Route::prefix('json')->group(function () {
-    Route::get('/hotels', [HotelController::class, 'index']);
+    Route::get('/hotel', [HotelController::class, 'index']);
+    Route::get('/guest_house', [GuestHouseController::class, 'index']);
+    Route::get('/tourist_attraction', [TouristAttractionController::class, 'index']);
 });
