@@ -48,10 +48,10 @@ class TouristAttractionController extends BaseController
         }
         
         if (!empty($paginate)) {
-            return HotelResource::collection($touristAttractionQuery->with(explode(",", $scope))->paginate($limit));
+            return TouristAttractionResource::collection($touristAttractionQuery->with(explode(",", $scope))->paginate($limit));
         }
         else {
-            return HotelResource::collection($touristAttractionQuery->with(explode(",", $scope))->get());
+            return TouristAttractionResource::collection($touristAttractionQuery->with(explode(",", $scope))->get());
         }
     }
     /**

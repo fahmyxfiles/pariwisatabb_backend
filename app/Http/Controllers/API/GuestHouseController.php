@@ -48,10 +48,10 @@ class GuestHouseController extends BaseController
         }
 
         if (!empty($paginate)) {
-            return HotelResource::collection($guestHouseQuery->with(explode(",", $scope))->paginate($limit));
+            return GuestHouseResource::collection($guestHouseQuery->with(explode(",", $scope))->paginate($limit));
         }
         else {
-            return HotelResource::collection($guestHouseQuery->with(explode(",", $scope))->get());
+            return GuestHouseResource::collection($guestHouseQuery->with(explode(",", $scope))->get());
         }
     }
     /**
