@@ -15,6 +15,8 @@ class TouristAttraction extends JsonResource
     public function toArray($request)
     {
         $ret = parent::toArray($request);
+        var_dump($ret);
+        exit;
         if(is_array($ret['instagram_hashtags'])){
             $ret['instagram_hashtags'] = explode(",", $ret['instagram_hashtags']);
         }
