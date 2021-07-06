@@ -32,6 +32,8 @@ class HotelController extends BaseController
         $regency_id = Arr::get($searchParams, 'regency_id', '');
         $paginate = Arr::get($searchParams, 'paginate', true);
 
+        var_dump($paginate);
+
         if (!empty($keyword)) {
             $hotelQuery->where(function ($query) use ($keyword){
                 $query->where('name', 'LIKE', '%' . $keyword . '%');
