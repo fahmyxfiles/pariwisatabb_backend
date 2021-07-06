@@ -31,7 +31,7 @@ class HotelController extends BaseController
         $keyword = Arr::get($searchParams, 'keyword', '');
         $regency_id = Arr::get($searchParams, 'regency_id', '');
         $paginate = Arr::get($searchParams, 'paginate', '1');
-        $scope = Arr::get($searchParams, 'scope', '');
+        $scope = Arr::get($searchParams, 'scope', 'regency,images');
 
         if (!empty($keyword)) {
             $hotelQuery->where(function ($query) use ($keyword){
@@ -45,15 +45,10 @@ class HotelController extends BaseController
             $hotelQuery->where('regency_id', '=', $regency_id);
         }
         if (!empty($paginate)) {
-            return HotelResource::collection($hotelQuery->paginate($limit));
+            return HotelResource::collection($hotelQuery->with(explode(",", $scope))->paginate($limit));
         }
         else {
-            if(!empty($scope)){
-                return HotelResource::collection($hotelQuery->with(explode(",", $scope))->get());
-            }
-            else {
-            return HotelResource::collection($hotelQuery->get());
-            }
+            return HotelResource::collection($hotelQuery->with(explode(",", $scope))->get());
         }
     }
     /**

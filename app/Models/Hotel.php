@@ -25,8 +25,6 @@ class Hotel extends Model
         'description',
     ];
 
-    protected $with = ['regency', 'images'];
-
     public function regency()
     {
         return $this->belongsTo(Regency::class);
