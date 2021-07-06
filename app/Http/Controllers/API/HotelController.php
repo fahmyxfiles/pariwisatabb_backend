@@ -30,10 +30,7 @@ class HotelController extends BaseController
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
         $regency_id = Arr::get($searchParams, 'regency_id', '');
-        $paginate = Arr::get($searchParams, 'paginate', true);
-
-        var_dump($searchParams);
-        exit;
+        $paginate = Arr::get($searchParams, 'paginate', '1');
 
         if (!empty($keyword)) {
             $hotelQuery->where(function ($query) use ($keyword){
@@ -46,7 +43,7 @@ class HotelController extends BaseController
         if(!empty($regency_id)){
             $hotelQuery->where('regency_id', '=', $regency_id);
         }
-        if($paginate == true){
+        if (!empty($paginate)) {
             return HotelResource::collection($hotelQuery->paginate($limit));
         }
         else {
