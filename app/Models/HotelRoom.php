@@ -24,8 +24,6 @@ class HotelRoom extends Model
         'bed_size',
     ];
 
-    protected $with = ['hotel'];
-
     public function hotel()
     {
         return $this->belongsTo(Hotel::class);
