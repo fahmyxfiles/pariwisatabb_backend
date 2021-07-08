@@ -29,12 +29,18 @@ class TouristAttractionCategoryController extends BaseController
         $touristAttractionCategoryQuery = TouristAttractionCategory::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
+        $paginate = Arr::get($searchParams, 'paginate', '1');
 
         if (!empty($keyword)) {
             $touristAttractionCategoryQuery->where('name', 'LIKE', '%' . $keyword . '%');
         }
 
-        return TouristAttractionCategoryResource::collection($touristAttractionCategoryQuery->paginate($limit));
+        if (!empty($paginate)) {
+            return TouristAttractionCategoryResource::collection($touristAttractionCategoryQuery->paginate($limit));
+        }
+        else {
+            return TouristAttractionCategoryResource::collection($touristAttractionCategoryQuery->get());
+        }
     }
     /**
      * Store a newly created resource in storage.
