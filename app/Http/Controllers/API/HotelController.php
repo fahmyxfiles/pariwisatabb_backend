@@ -129,6 +129,8 @@ class HotelController extends BaseController
             }
             $hotel->images()->delete();
             foreach($hotel->rooms() as $room){
+                var_dump($room);
+                exit;
                 $room->images()->delete();
                 $room->pricings()->delete();
                 $room->facilities()->sync(null);
