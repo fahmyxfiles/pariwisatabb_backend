@@ -124,10 +124,10 @@ class HotelController extends BaseController
     public function destroy(Hotel $hotel)
     {
         try {
+            $hotel->load(['images', 'rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
             foreach($hotel->images() as $image){
                 Storage::disk('images')->delete('hotel/' . basename($image->image_filename));
             }
-            $hotel->load(['images', 'rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
             $hotel->images()->delete();
             foreach($hotel->rooms() as $room){
                 $room->images()->delete();
