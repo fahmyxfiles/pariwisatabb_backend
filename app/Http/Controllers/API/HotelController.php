@@ -136,6 +136,7 @@ class HotelController extends BaseController
                 $room->delete();
             }
             $hotel->facilities()->sync(null);
+            $hotel->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }
