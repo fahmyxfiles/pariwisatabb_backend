@@ -132,8 +132,8 @@ class HotelController extends BaseController
                 $room->images()->delete();
                 $room->pricings()->delete();
                 $room->facilities()->sync(null);
+                $room->delete();
             }
-            $hotel->rooms()->delete();
             $hotel->facilities()->sync(null);
             $hotel->delete();
         } catch (\Exception $ex) {
