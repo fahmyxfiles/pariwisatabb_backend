@@ -125,6 +125,8 @@ class HotelController extends BaseController
     {
         try {
             $hotel->load(['images', 'rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
+            var_dump($hotel);
+            exit;
             foreach($hotel->images() as $image){
                 Storage::disk('images')->delete('hotel/' . basename($image->image_filename));
             }
