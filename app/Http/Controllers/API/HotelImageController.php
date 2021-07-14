@@ -49,16 +49,16 @@ class HotelImageController extends BaseController
         $height = 1000;
         $imageValidationParams = 'required|image|mimes:png,jpg,jpeg|max:2048';
         if($input['type'] == 'main'){
-            $width = 1280;
-            $height = 720;
+            $width = 640;
+            $height = 360;
         }
         if($input['type'] == 'banner'){
-            $width = 1500;
-            $height = 400;
+            $width = 900;
+            $height = 240;
         }
         if($input['type'] == 'common'){
-            $width = 1000;
-            $height = 750;
+            $width = 800;
+            $height = 600;
         }
 
         $validator = Validator::make($input, [
@@ -119,16 +119,16 @@ class HotelImageController extends BaseController
         $height = 1000;
         $imageValidationParams = 'image|mimes:png,jpg,jpeg|max:2048';
         if($input['type'] == 'main'){
-            $width = 1280;
-            $height = 720;
+            $width = 640;
+            $height = 360;
         }
         if($input['type'] == 'banner'){
-            $width = 1500;
-            $height = 400;
+            $width = 900;
+            $height = 240;
         }
         if($input['type'] == 'common'){
-            $width = 1000;
-            $height = 750;
+            $width = 800;
+            $height = 600;
         }
 
         $validator = Validator::make($input, [
