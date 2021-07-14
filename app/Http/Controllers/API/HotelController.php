@@ -125,12 +125,11 @@ class HotelController extends BaseController
     {
         try {
             $hotel->load(['images', 'rooms', 'rooms.facilities', 'rooms.images', 'rooms.pricings', 'facilities']);
-            foreach($hotel->images() as $image){
+            foreach($hotel->images as $image){
                 Storage::disk('images')->delete('hotel/' . basename($image->image_filename));
             }
             $hotel->images()->delete();
-            foreach($hotel->rooms() as $room){
-                print_r($room);
+            foreach($hotel->rooms as $room){
                 $room->images()->delete();
                 $room->pricings()->delete();
                 $room->facilities()->sync(null);
