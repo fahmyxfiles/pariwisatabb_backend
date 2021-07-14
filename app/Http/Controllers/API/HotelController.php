@@ -128,6 +128,9 @@ class HotelController extends BaseController
                 Storage::disk('images')->delete('hotel/' . basename($image->image_filename));
             }
             $hotel->images()->delete();
+            foreach($hotel->rooms() as $room){
+                $room->facilities()->sync(null);
+            }
             $hotel->rooms()->delete();
             $hotel->facilities()->sync(null);
             $hotel->delete();
