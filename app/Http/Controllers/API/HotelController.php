@@ -124,6 +124,12 @@ class HotelController extends BaseController
     public function destroy(Hotel $hotel)
     {
         try {
+            foreach($hotel->images() as $image){
+                Storage::disk('images')->delete('hotel/' . basename($image->image_filename));
+            }
+            $hotel->images()->delete();
+            $hotel->rooms()->delete();
+            $hotel->facilities()->sync(null);
             $hotel->delete();
         } catch (\Exception $ex) {
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
