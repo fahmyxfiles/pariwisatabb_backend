@@ -9,10 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\TouristAttractionCategory;
-use App\Models\Regency;
 use Validator;
 use App\Http\Resources\TouristAttractionCategory as TouristAttractionCategoryResource;
-use App\Http\Resources\Regency as RegencyResource;
 use Intervention\Image\Facades\Image;
 
 class TouristAttractionCategoryController extends BaseController

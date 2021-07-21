@@ -1,32 +1,45 @@
 <?php
-
-namespace App\Http\Controllers;
-
-use App\Models\CulinaryPlaceCategory;
+   
+namespace App\Http\Controllers\API;
+   
+   
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\CulinaryPlaceCategory;
+use Validator;
+use App\Http\Resources\CulinaryPlaceCategory as CulinaryPlaceCategoryResource;
+use Intervention\Image\Facades\Image;
 
-class CulinaryPlaceCategoryController extends Controller
+class CulinaryPlaceCategoryController extends BaseController
 {
+    const ITEM_PER_PAGE = 15;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $searchParams = $request->all();
+        $culinaryPlaceCategoryQuery = CulinaryPlaceCategory::query();
+        $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
+        $keyword = Arr::get($searchParams, 'keyword', '');
+        $paginate = Arr::get($searchParams, 'paginate', '1');
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        if (!empty($keyword)) {
+            $culinaryPlaceCategoryQuery->where('name', 'LIKE', '%' . $keyword . '%');
+        }
 
+        if (!empty($paginate)) {
+            return CulinaryPlaceCategoryResource::collection($culinaryPlaceCategoryQuery->paginate($limit));
+        }
+        else {
+            return CulinaryPlaceCategoryResource::collection($culinaryPlaceCategoryQuery->get());
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -35,51 +48,100 @@ class CulinaryPlaceCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $input = $request->all();
+   
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'image' => 'required|base64image|base64mimes:png,jpg,jpeg|base64max:2048',
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
 
+        $img = Image::make(file_get_contents($input['image']));
+        if($img == null){
+            return $this->sendError('Image Error.', 'Invalid Image uploaded');  
+        }
+        // add callback functionality to retain maximal original image size
+        $img->fit(640, 360, function ($constraint) {
+            $constraint->upsize();
+        });
+        $ext = explode("/", $img->mime())[1];
+       
+        $name = time() . "." . $ext;
+        Storage::disk('images')->put("culinary_place/" . $name, $img->stream('jpg', 80));
+        $input['image_filename'] = "images/culinary_place/" . $name;
+
+        unset($input['image']);
+
+        $culinaryPlaceCategory = CulinaryPlaceCategory::create($input);
+        return $this->sendResponse(new CulinaryPlaceCategoryResource($culinaryPlaceCategory));
+    }
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CulinaryPlaceCategory  $culinaryPlaceCategory
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show(CulinaryPlaceCategory $culinaryPlaceCategory)
     {
-        //
+        return $this->sendResponse(new CulinaryPlaceCategoryResource($culinaryPlaceCategory));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\CulinaryPlaceCategory  $culinaryPlaceCategory
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CulinaryPlaceCategory $culinaryPlaceCategory)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CulinaryPlaceCategory  $culinaryPlaceCategory
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, CulinaryPlaceCategory $culinaryPlaceCategory)
     {
-        //
-    }
+        $input = $request->all();
+   
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'image' => 'base64image|base64mimes:png,jpg,jpeg|base64max:2048',
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
 
+        if(!empty($input['image'])){
+            Storage::disk('images')->delete('culinary_place/' . basename($culinaryPlaceCategory->image_filename));
+            $img = Image::make(file_get_contents($input['image']));
+            if($img == null){
+                return $this->sendError('Image Error.', 'Invalid Image uploaded');  
+            }
+            // add callback functionality to retain maximal original image size
+            $img->fit(640, 360, function ($constraint) {
+                $constraint->upsize();
+            });
+            $ext = explode("/", $img->mime())[1];
+        
+            $name = time() . "." . $ext;
+            Storage::disk('images')->put("culinary_place/" . $name, $img->stream('jpg', 80));
+            $input['image_filename'] = "images/culinary_place/" . $name;
+            unset($input['image']);
+        }
+
+        $culinaryPlaceCategory->update($input);
+        return $this->sendResponse(new CulinaryPlaceCategoryResource($culinaryPlaceCategory));
+    }
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CulinaryPlaceCategory  $culinaryPlaceCategory
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(CulinaryPlaceCategory $culinaryPlaceCategory)
     {
-        //
+        try {
+            Storage::disk('images')->delete('culinary_place/' . basename($culinaryPlaceCategory->image_filename));
+            $culinaryPlaceCategory->delete();
+        } catch (\Exception $ex) {
+            return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
+        }
+        return $this->sendResponse([]);
     }
 }

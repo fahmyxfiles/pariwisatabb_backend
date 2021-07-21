@@ -132,7 +132,6 @@ class TouristAttractionImageController extends BaseController
 
         $validator = Validator::make($input, [
             'tourist_attraction_id' => 'required|exists:tourist_attractions,id',
-            'tourist_attraction_room_id' => 'nullable|exists:tourist_attraction_rooms,id',
             'name' => 'required',
             'type' => 'required',
             'file' => $imageValidationParams
