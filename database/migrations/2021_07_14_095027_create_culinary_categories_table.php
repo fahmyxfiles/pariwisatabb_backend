@@ -15,6 +15,8 @@ class CreateCulinaryCategoriesTable extends Migration
     {
         Schema::create('culinary_categories', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('image_filename');
             $table->timestamps();
         });
     }
