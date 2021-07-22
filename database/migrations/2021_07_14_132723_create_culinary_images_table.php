@@ -19,7 +19,6 @@ class CreateCulinaryImagesTable extends Migration
             $table->string('name');
             $table->string('image_filename');
             $table->enum('type', ['main', 'banner', 'common']);
-            $table->timestamps();
 
             $table->foreign('culinary_id')->references('id')->on('culinaries');
             $table->timestamps();

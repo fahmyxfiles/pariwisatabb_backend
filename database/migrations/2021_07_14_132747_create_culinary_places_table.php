@@ -24,7 +24,6 @@ class CreateCulinaryPlacesTable extends Migration
             $table->string('map_center')->nullable();
             $table->text('description');
             $table->text('instagram_hashtags')->nullable();
-            $table->timestamps();
 
             $table->foreign('regency_id')->references('id')->on('regencies');
             $table->foreign('category_id')->references('id')->on('culinary_place_categories');

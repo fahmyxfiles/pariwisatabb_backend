@@ -19,7 +19,6 @@ class CreateCulinaryPlaceImagesTable extends Migration
             $table->string('name');
             $table->string('image_filename');
             $table->enum('type', ['main', 'banner', 'common']);
-            $table->timestamps();
 
             $table->foreign('culinary_place_id')->references('id')->on('culinary_places');
             $table->timestamps();
