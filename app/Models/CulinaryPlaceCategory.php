@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class CulinaryPlaceCategory extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'image_filename',
+    ];
+
+    public function culinary_places()
+    {
+        return $this->hasMany(CulinaryPlace::class);
+    }
 }
