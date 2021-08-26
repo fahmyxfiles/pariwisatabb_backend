@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\VueController;
 use App\Http\Controllers\API\HotelController;
 use App\Http\Controllers\API\GuestHouseController;
 use App\Http\Controllers\API\TouristAttractionController;
@@ -23,7 +24,7 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'web'], function () {
-    Route::get('/', 'VueController@index')->where('any', '.*')->name('vue');
+    Route::get('/', [VueController::class, 'index'])->where('any', '.*')->name('vue');
 });
 
 
