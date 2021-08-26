@@ -19,7 +19,11 @@ use App\Http\Controllers\API\TouristAttractionCategoryController;
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('welcome');
+});
+
+Route::group(['middleware' => 'web'], function () {
+    Route::get('/', 'VueController@index')->where('any', '.*')->name('vue');
 });
 
 
