@@ -33,8 +33,13 @@ class Culinary extends Model
         return $this->hasMany(CulinaryImage::class);
     }
 
-    public function culinary_places()
-    {
-        return $this->belongsToMany(CulinaryPlace::class, 'culinary_has_culinary_place', 'culinary_id', 'culinary_place_id');
+    public function category(){
+        return $this->belongsTo(CulinaryCategory::class);
     }
+
+    public function facilities()
+    {
+        return $this->belongsToMany(Facility::class, 'culinary_has_facilities', 'tourist_attraction_id', 'facility_id');
+    }
+    
 }

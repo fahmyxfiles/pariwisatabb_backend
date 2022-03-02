@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCulinaryHasCulinaryPlaceTable extends Migration
+class CreateCulinaryHasFacilitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateCulinaryHasCulinaryPlaceTable extends Migration
      */
     public function up()
     {
-        Schema::create('culinary_has_culinary_place', function (Blueprint $table) {
+        Schema::create('culinary_has_facilities', function (Blueprint $table) {
             $table->unsignedBigInteger('culinary_id');
-            $table->unsignedBigInteger('culinary_place_id');
+            $table->unsignedBigInteger('facility_id');
 
             $table->foreign('culinary_id')->references('id')->on('culinaries');
-            $table->foreign('culinary_place_id')->references('id')->on('culinary_places');
-            $table->primary(['culinary_id', 'culinary_place_id'], 'c_has_cp_ta_c_f_id_primary');
+            $table->foreign('facility_id')->references('id')->on('facilities');
+            $table->primary(['culinary_id', 'facility_id'], 'c_has_facilities_c_id_f_id_primary');
         });
     }
 
@@ -30,6 +30,6 @@ class CreateCulinaryHasCulinaryPlaceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('culinary_has_culinary_place');
+        Schema::dropIfExists('culinary_has_facilities');
     }
 }

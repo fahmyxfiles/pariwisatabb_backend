@@ -39,6 +39,10 @@ class TouristAttraction extends Model
         return $this->hasMany(TouristAttractionImage::class);
     }
 
+    public function category(){
+        return $this->belongsTo(TouristAttractionCategory::class);
+    }
+
     public function pricings()
     {
         return $this->hasMany(TouristAttractionPricing::class);

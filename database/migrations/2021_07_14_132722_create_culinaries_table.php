@@ -18,11 +18,15 @@ class CreateCulinariesTable extends Migration
             $table->unsignedBigInteger('regency_id');
             $table->unsignedBigInteger('category_id');
             $table->string('name');
+            $table->text('address');
+            $table->string('postal_code');
+            $table->string('map_coordinate')->nullable();
+            $table->string('map_center')->nullable();
             $table->text('description');
-            $table->timestamps();
+            $table->text('instagram_hashtags')->nullable();
 
             $table->foreign('regency_id')->references('id')->on('regencies');
-            $table->foreign('category_id')->references('id')->on('culinary_categories');
+            $table->foreign('category_id')->references('id')->on('culinary_place_categories');
         });
     }
 
