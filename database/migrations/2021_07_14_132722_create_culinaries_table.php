@@ -26,7 +26,7 @@ class CreateCulinariesTable extends Migration
             $table->text('instagram_hashtags')->nullable();
 
             $table->foreign('regency_id')->references('id')->on('regencies');
-            $table->foreign('category_id')->references('id')->on('culinary_place_categories');
+            $table->foreign('category_id')->references('id')->on('culinary_categories');
         });
     }
 
