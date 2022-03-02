@@ -22,6 +22,10 @@ use App\Http\Controllers\API\TouristAttractionController;
 use App\Http\Controllers\API\TouristAttractionCategoryController;
 use App\Http\Controllers\API\TouristAttractionPricingController;
 use App\Http\Controllers\API\TouristAttractionImageController;
+use App\Http\Controllers\API\CulinaryController;
+use App\Http\Controllers\API\CulinaryCategoryController;
+use App\Http\Controllers\API\CulinaryPricingController;
+use App\Http\Controllers\API\CulinaryImageController;
 use App\Http\Controllers\API\FacilityController;
 
 /*
@@ -99,6 +103,20 @@ Route::middleware('auth:api')->group( function () {
     
     // TouristAttractions images
     Route::resource('tourist_attraction_image', TouristAttractionImageController::class);
+
+    // Culinary and Regencies
+    Route::get('culinary/getAvailableRegencies', [CulinaryController::class, 'getAvailableRegencies']);
+    Route::get('culinary/getAvailableCategories', [CulinaryController::class, 'getAvailableCategories']);
+    Route::resource('culinary', CulinaryController::class);
+    Route::post('culinary/{touristAttraction}/syncFacilities', [CulinaryController::class, 'syncFacilities']);
+
+    Route::resource('culinary_category', CulinaryCategoryController::class);
+
+    // Culinariess pricing
+    Route::resource('culinary_pricing', CulinaryPricingController::class);
+    
+    // Culinariess images
+    Route::resource('culinary_image', CulinaryImageController::class);
 
     // Facilities
     Route::get('facility/getAllFacility', [FacilityController::class, 'getAllFacility']);

@@ -38,7 +38,6 @@ class CulinaryController extends BaseController
         if (!empty($keyword)) {
             $culinaryQuery->where(function ($query) use ($keyword){
                 $query->where('name', 'LIKE', '%' . $keyword . '%');
-                $query->orWhere('address', 'LIKE', '%' . $keyword . '%');
                 $query->orWhere('description', 'LIKE', '%' . $keyword . '%');
             });
         }
