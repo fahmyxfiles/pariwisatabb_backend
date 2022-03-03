@@ -119,7 +119,7 @@ class UserController extends BaseController
         }
         unset($input['roles']);
         unset($input['permissions']);
-
+        dd($input);
         $user->update($input);
         $user->syncRoles($roles);
         $user->syncPermissions($permissions);
