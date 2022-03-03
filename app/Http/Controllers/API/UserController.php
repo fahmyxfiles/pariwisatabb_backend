@@ -109,15 +109,13 @@ class UserController extends BaseController
         }
 
 
+        if(empty($input['password'])){
+            unset($input['password']);
+            unset($input['c_password']);
+        }
 
         if(isset($input['password'])){
-            if(empty($input['password'])){
-                unset($input['password']);
-                unset($input['c_password']);
-            }
-            else {
-                $input['password'] = Hash::make($input['password']);
-            }
+            $input['password'] = Hash::make($input['password']);
         }
 
         $roles = $input['roles'];
