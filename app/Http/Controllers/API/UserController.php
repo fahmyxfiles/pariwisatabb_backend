@@ -108,8 +108,16 @@ class UserController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
+
+
         if(isset($input['password'])){
-            $input['password'] = Hash::make($input['password']);
+            if(empty($input['password'])){
+                unset($input['password']);
+                unset($input['c_password']);
+            }
+            else {
+                $input['password'] = Hash::make($input['password']);
+            }
         }
 
         $roles = $input['roles'];
@@ -119,7 +127,6 @@ class UserController extends BaseController
         }
         unset($input['roles']);
         unset($input['permissions']);
-        dd($input);
         $user->update($input);
         $user->syncRoles($roles);
         $user->syncPermissions($permissions);
