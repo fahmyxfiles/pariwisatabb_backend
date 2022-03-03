@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use Validator;
+use App\Models\Role;
+use App\Models\Permission;
+use App\Http\Resources\Role as RoleResource;
+use App\Http\Resources\Permission as PermissionResource;
 use App\Http\Resources\User as UserResource;
 
 class UserController extends BaseController
@@ -25,12 +29,10 @@ class UserController extends BaseController
         $userQuery = User::query();
         $limit = Arr::get($searchParams, 'limit', static::ITEM_PER_PAGE);
         $keyword = Arr::get($searchParams, 'keyword', '');
-
         if (!empty($keyword)) {
             $userQuery->where('email', 'LIKE', '%' . $keyword . '%');
             $userQuery->orWhere('full_name', 'LIKE', '%' . $keyword . '%');
         }
-
         return UserResource::collection($userQuery->paginate($limit));
     }
     /**
@@ -138,5 +140,15 @@ class UserController extends BaseController
             return $this->sendError('Delete Error.', $ex->getMessage(), 403);    
         }
         return $this->sendResponse([]);
+    }
+
+    public function getAvailableRoles(Request $request){
+        $roles = Role::all();
+        return RoleResource::collection($roles);
+    }
+
+    public function getAvailablePermissions(Request $request){
+        $permissions = Permission::all();
+        return PermissionResource::collection($permissions);
     }
 }

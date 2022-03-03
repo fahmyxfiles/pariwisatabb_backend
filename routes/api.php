@@ -51,6 +51,8 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('role', RoleController::class);
     
     // User
+    Route::get('user/getAvailableRoles', [UserController::class, 'getAvailableRoles']);
+    Route::get('user/getAvailablePermissions', [UserController::class, 'getAvailablePermissions']);
     Route::resource('user', UserController::class);
     
     // User devices
