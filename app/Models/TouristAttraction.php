@@ -27,7 +27,7 @@ class TouristAttraction extends Model
         'instagram_hashtags',
     ];
 
-    protected $with = ['regency', 'images'];
+    protected $with = ['regency', 'images', 'pricings'];
 
     public function regency()
     {
